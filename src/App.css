@@ -1,0 +1,40 @@
+html, body, #root {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.FullHeightContent {
+    min-height: 100vh;
+    /*width: 100vw;*/
+    padding: 0 0 0 0;
+    margin: 0 0 0 0 !important;
+}
+
+.StretchContent {
+    display: flex;
+    flex-flow: column;
+}
+
+.StretchContainer {
+    flex: 1 1 auto;
+    display: flex !important;
+}
+
+.KeepLineBreaks {
+    white-space: pre-line;
+}
+
+.CutoffBar {
+    min-height: 1vh;
+    max-height: 1vh;
+    width: 100vw;
+    background-color: #D4D4D4;
+    margin: 0 0 0 0 !important;
+}
+
+.ImportantText {
+    font-size: 20px
+}
