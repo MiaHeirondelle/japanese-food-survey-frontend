@@ -18,6 +18,8 @@ class Login extends Component {
     });
   }
 
+  // todo: before view render check if already logged in
+
   async stateTransition(formEvent) {
     formEvent.preventDefault();
     formEvent.stopPropagation();
