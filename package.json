@@ -1,6 +1,9 @@
 {
   "name": "japanese-food-survey-frontend",
   "version": "0.1.0",
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "bootstrap": "^5.1.0",
     "react": "^17.0.2",
@@ -14,15 +17,7 @@
     "build": "react-scripts build"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "production": [],
+    "development": []
   }
 }

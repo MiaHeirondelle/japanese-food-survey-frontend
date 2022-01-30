@@ -3,7 +3,7 @@ import {AppState} from './component/model.js';
 import React, {Component} from 'react'
 import Login from './views/Login';
 import SessionCheck from "./views/SessionCheck";
-import PersonalInfoView from "./views/Personal";
+import PersonalInfoView from "./views/PersonalInfoView";
 import QuestionSession from "./views/QuestionSession";
 
 class App extends Component {
