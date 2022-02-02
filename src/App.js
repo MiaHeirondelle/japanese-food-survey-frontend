@@ -28,7 +28,7 @@ class App extends Component {
         return <Login key='explanation' stateTransition={this.stateTransitionCb(AppState.SESSION_CHECK)}/>
 
       case AppState.SESSION_CHECK:
-        return <SessionCheck key='sessionCheck' stateTransition={this.stateTransitionCb(null)}/>
+        return <SessionCheck key='sessionCheck' checkResult={this.state.checkResult}/>
 
       case AppState.PERSONAL_INFO:
         return <PersonalInfo key='personalInfo'/>
