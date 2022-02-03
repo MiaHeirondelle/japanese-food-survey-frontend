@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-class PersonalInfoView extends Component {
+class PersonalInfo extends Component {
 
 // Expects `stateTransition` function.
     render() {
@@ -35,4 +35,4 @@ class PersonalInfoView extends Component {
     }
 }
 
-export default PersonalInfoView;
+export default PersonalInfo;

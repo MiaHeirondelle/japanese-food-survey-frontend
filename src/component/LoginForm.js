@@ -16,8 +16,7 @@ class LoginForm extends Component {
           <Form.Label>Password</Form.Label>
           <Form.Control name='password' type='password' placeholder='Password' />
         </Form.Group>
-        <br/>
-        <Button type='submit' disabled={this.props.disabled}>Submit</Button>
+        <Button className='btn-block' type='submit' disabled={this.props.disabled}>次へ</Button>
       </Form>
     )
   }

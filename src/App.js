@@ -3,14 +3,14 @@ import {AppState} from './component/model.js';
 import React, {Component} from 'react'
 import Login from './views/Login';
 import SessionCheck from "./views/SessionCheck";
-import PersonalInfoView from "./views/PersonalInfoView";
+import PersonalInfo from "./views/PersonalInfo";
 import QuestionSession from "./views/QuestionSession";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: AppState.PERSONAL_INFO
+      name: AppState.LOGIN
     }
   }
 
@@ -28,10 +28,10 @@ class App extends Component {
         return <Login key='explanation' stateTransition={this.stateTransitionCb(AppState.SESSION_CHECK)}/>
 
       case AppState.SESSION_CHECK:
-        return <SessionCheck key='sessionCheck' stateTransition={this.stateTransitionCb(null)}/>
+        return <SessionCheck key='sessionCheck' checkResult={this.state.checkResult}/>
 
       case AppState.PERSONAL_INFO:
-        return <PersonalInfoView key='personalInfo'/>
+        return <PersonalInfo key='personalInfo'/>
 
       case AppState.SESSION_IN_PROGRESS:
         return <QuestionSession key='questionSession'/>
