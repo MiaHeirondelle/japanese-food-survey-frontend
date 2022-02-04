@@ -10,7 +10,7 @@ class SessionCheck extends Component {
     return (
       <Row className='FullHeightContent align-items-center'>
         <Col className='col-lg-4 offset-lg-4 text-center'>
-          {this.props.checkResult}
+          Done!
         </Col>
       </Row>
     );
