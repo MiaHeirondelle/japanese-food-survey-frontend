@@ -8,6 +8,12 @@ import LoginForm from '../component/LoginForm';
 
 class Login extends Component {
   // Expects `stateTransition` function.
+  constructor(props) {
+    super(props);
+    this.state = {
+      formDisabled: true
+    }
+  }
 
   async login(formData) {
     return await fetch(`${config['backend']['uri']}/auth/login`, {
@@ -26,6 +32,18 @@ class Login extends Component {
     return response.text()
   }
 
+  async componentDidMount() {
+    const response = await fetch(`${config['backend']['uri']}/auth/check`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+    if (response.ok) {
+      this.props.stateTransition();
+    } else {
+      this.setState({formDisabled: false})
+    }
+  }
+
   // todo: after view render check if already logged in
 
   async stateTransition(formEvent) {
@@ -36,10 +54,9 @@ class Login extends Component {
     if (form.checkValidity() === true) {
       const formValues = extractUrlEncodedFormData(form);
       await this.login(formValues);
-      const checkResult = await this.sessionCheck();
       form.reset();
       window.scrollTo(0, 0);
-      this.props.stateTransition({checkResult});
+      this.props.stateTransition();
     }
   }
 
@@ -54,7 +71,8 @@ class Login extends Component {
             </h5>
           </Row>
           <Row className='mt-3'>
-            <LoginForm formId='user-login' onSubmit={this.stateTransition.bind(this)}/>
+            <LoginForm formId='user-login' disabled={this.state.formDisabled}
+                       onSubmit={this.stateTransition.bind(this)}/>
           </Row>
         </Col>
       </Row>
