@@ -23,7 +23,7 @@ class Login extends Component {
       body: formData
     });
     const userJson = await response.json();
-    return new User(userJson.user, userJson.name, userJson.role);
+    return new User(userJson.id, userJson.name, userJson.role);
   }
 
   async componentDidMount() {
@@ -33,7 +33,7 @@ class Login extends Component {
     });
     if (response.ok) {
       const userJson = await response.json();
-      const user = new User(userJson.user, userJson.name, userJson.role);
+      const user = new User(userJson.id, userJson.name, userJson.role);
       this.props.stateTransitionCb({user});
     } else {
       this.setState({formDisabled: false})

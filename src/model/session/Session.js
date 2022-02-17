@@ -4,8 +4,8 @@ class Session {
     pendingRespondents,
     admin,
     status) {
-    this.currentRespondents = currentRespondents;
-    this.pendingRespondents = pendingRespondents;
+    this.currentRespondents = currentRespondents || [];
+    this.pendingRespondents = pendingRespondents || [];
     this.admin = admin;
     this.status = status;
   }
