@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 
 class PersonalInfo extends Component {
 
-// Expects `stateTransition` function.
+// Expects `loginStateTransition` function.
     render() {
         return (
             <div className="col-lg">

@@ -1,11 +1,10 @@
 import {Component} from "react";
-import {SessionState} from "../component/model";
+import {QuestionSessionState} from "../model/session/QuestionSessionState";
 import BasicQuestion from "../component/BasicQuestion";
 import BasicQuestionModel from "../model/BasicQuestionModel";
 import {extractUrlEncodedFormData} from "../util/FormUtil";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
-
 
 class QuestionSession extends Component {
 
@@ -13,7 +12,7 @@ class QuestionSession extends Component {
   // State: sessionState
   constructor(props) {
     super(props);
-    this.sessionState = SessionState.BASIC_QUESTION;
+    this.sessionState = QuestionSessionState.BASIC_QUESTION;
   }
 
   onSubmit(formEvent) {
@@ -29,7 +28,7 @@ class QuestionSession extends Component {
 
   render() {
     switch (this.sessionState) {
-      case SessionState.BASIC_QUESTION:
+      case QuestionSessionState.BASIC_QUESTION:
         const questionModel = new BasicQuestionModel(
           'QuestionId',
           1,
