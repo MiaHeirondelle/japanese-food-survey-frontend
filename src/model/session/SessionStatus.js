@@ -1,5 +1,6 @@
 export const SessionStatus = {
+  NOT_CREATED: 'not_created',
   AWAITING_USERS: 'awaiting_users',
   CAN_BEGIN: 'can_begin',
-  BASIC_QUESTION: 'basic_question'
+  IN_PROGRESS: 'in_progress'
 }

@@ -6,7 +6,6 @@ import {extractUrlEncodedFormData} from "../util/FormUtil";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
 
-
 class QuestionSession extends Component {
 
   // Expects: `stateTransition` function,

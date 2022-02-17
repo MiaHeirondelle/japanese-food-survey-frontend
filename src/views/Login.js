@@ -8,7 +8,7 @@ import LoginForm from '../component/LoginForm';
 import User from "../model/user/User";
 
 class Login extends Component {
-  // Expects `loginStateTransition` function.
+  // Expects `stateTransitionCb` function.
   constructor(props) {
     super(props);
     this.state = {
@@ -34,7 +34,7 @@ class Login extends Component {
     if (response.ok) {
       const userJson = await response.json();
       const user = new User(userJson.user, userJson.name, userJson.role);
-      this.props.stateTransition({user});
+      this.props.stateTransitionCb({user});
     } else {
       this.setState({formDisabled: false})
     }
@@ -52,7 +52,7 @@ class Login extends Component {
       const user = await this.login(formValues);
       form.reset();
       window.scrollTo(0, 0);
-      this.props.stateTransition({user});
+      this.props.stateTransitionCb({user});
     }
   }
 

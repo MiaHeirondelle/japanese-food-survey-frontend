@@ -20,7 +20,6 @@ class App extends Component {
     const self = this;
     return async (data) => {
       const asyncData = await asyncCb();
-      console.log(asyncData);
       self.setState((previousState) => {
         return {user: previousState.user, ...data, ...asyncData, name: state};
       })
@@ -38,10 +37,10 @@ class App extends Component {
   render() {
     switch (this.state.name) {
       case AppState.LOGIN:
-        return <Login key='explanation' stateTransition={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSession)}/>;
+        return <Login key='explanation' stateTransitionCb={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSession)}/>;
 
       case AppState.SESSION_CHECK:
-        return <SessionCheck key='sessionCheck' session={this.state.session} user={this.state.user}/>;
+        return <SessionCheck key='sessionCheck' session={this.state.session} user={this.state.user} refreshCb={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSession)}/>;
 
       case AppState.PERSONAL_INFO:
         return <PersonalInfo key='personalInfo'/>;
