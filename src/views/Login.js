@@ -5,6 +5,7 @@ import {extractUrlEncodedFormData} from '../util/FormUtil';
 
 import config from '../config.js';
 import LoginForm from '../component/LoginForm';
+import User from "../model/User";
 
 class Login extends Component {
   // Expects `stateTransition` function.
@@ -16,20 +17,13 @@ class Login extends Component {
   }
 
   async login(formData) {
-    return await fetch(`${config['backend']['uri']}/auth/login`, {
+    const response = await fetch(`${config['backend']['uri']}/auth/login`, {
       method: 'POST',
       credentials: 'include',
       body: formData
     });
-  }
-
-  // todo: remove
-  async sessionCheck() {
-    const response = await fetch(`${config['backend']['uri']}/auth/test`, {
-      method: 'POST',
-      credentials: 'include',
-    });
-    return response.text()
+    const userJson = await response.json();
+    return new User(userJson.user, userJson.name, userJson.role);
   }
 
   async componentDidMount() {
@@ -38,7 +32,9 @@ class Login extends Component {
       credentials: 'include'
     });
     if (response.ok) {
-      this.props.stateTransition();
+      const userJson = await response.json();
+      const user = new User(userJson.user, userJson.name, userJson.role);
+      this.props.stateTransition({user});
     } else {
       this.setState({formDisabled: false})
     }
@@ -53,10 +49,10 @@ class Login extends Component {
 
     if (form.checkValidity() === true) {
       const formValues = extractUrlEncodedFormData(form);
-      await this.login(formValues);
+      const user = await this.login(formValues);
       form.reset();
       window.scrollTo(0, 0);
-      this.props.stateTransition();
+      this.props.stateTransition({user});
     }
   }
 
