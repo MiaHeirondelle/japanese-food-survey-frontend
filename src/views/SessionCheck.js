@@ -9,7 +9,9 @@ class SessionCheck extends Component {
     return (
       <Row className='FullHeightContent align-items-center'>
         <Col className='col-lg-4 offset-lg-4 text-center'>
-          {`${this.props.user.name}`}
+          {this.props.user.name}
+          <br/>
+          {this.props.session.status}
         </Col>
       </Row>
     );

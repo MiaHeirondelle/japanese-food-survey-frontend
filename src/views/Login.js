@@ -5,10 +5,10 @@ import {extractUrlEncodedFormData} from '../util/FormUtil';
 
 import config from '../config.js';
 import LoginForm from '../component/LoginForm';
-import User from "../model/User";
+import User from "../model/user/User";
 
 class Login extends Component {
-  // Expects `stateTransition` function.
+  // Expects `loginStateTransition` function.
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +42,7 @@ class Login extends Component {
 
   // todo: after view render check if already logged in
 
-  async stateTransition(formEvent) {
+  async loginStateTransition(formEvent) {
     formEvent.preventDefault();
     formEvent.stopPropagation();
     const form = formEvent.currentTarget;
@@ -68,7 +68,7 @@ class Login extends Component {
           </Row>
           <Row className='mt-3'>
             <LoginForm formId='user-login' disabled={this.state.formDisabled}
-                       onSubmit={this.stateTransition.bind(this)}/>
+                       onSubmit={this.loginStateTransition.bind(this)}/>
           </Row>
         </Col>
       </Row>
