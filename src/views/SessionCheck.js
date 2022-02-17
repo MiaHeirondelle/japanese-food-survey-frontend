@@ -2,10 +2,10 @@ import React, {Component} from 'react'
 import Row from 'react-bootstrap/Row';
 import Col from "react-bootstrap/Col";
 import {SessionStatus} from "../model/session/SessionStatus";
-import NoSession from "../component/session_check/NoSession";
+import JoinSession from "../component/session_check/JoinSession";
 import SessionView from "../component/session_check/SessionView";
 import CantJoinSession from "../component/session_check/CantJoinSession";
-import JoinSession from "../component/session_check/NoSession";
+import NoSession from "../component/session_check/NoSession";
 import {UserRole} from "../model/user/UserRole";
 import CreateSession from "../component/session_check/CreateSession";
 
@@ -31,9 +31,11 @@ class SessionCheck extends Component {
           return <NoSession/>;
       case SessionStatus.AWAITING_USERS:
       case SessionStatus.CAN_BEGIN:
+        console.log(this.props.session);
+        console.log(this.props.user);
         if (this.props.session.containsPendingRespondent(this.props.user))
-          return <JoinSession user={this.props.user} session={this.props.session}/>;
-        else if (this.props.session.containsCurrentRespondent(this.props.user))
+          return <JoinSession onJoinCb={this.props.refreshCb}/>;
+        else if (this.props.session.containsParticipant(this.props.user))
           return <SessionView user={this.props.user} session={this.props.session}/>;
         else
           return <CantJoinSession/>;

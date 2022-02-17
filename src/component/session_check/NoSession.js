@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import Button from "react-bootstrap/Button"
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-class JoinSession extends Component {
+class NoSession extends Component {
   render() {
     return (
       <Row>
@@ -15,4 +14,4 @@ class JoinSession extends Component {
   }
 }
 
-export default JoinSession;
+export default NoSession;
