@@ -17,8 +17,8 @@ class App extends Component {
   stateTransitionCb(state) {
     const self = this;
     return (data) =>
-      self.setState(() => {
-        return {...data, name: state};
+      self.setState((previousState) => {
+        return {user: previousState.user, ...data, name: state};
       })
   }
 
@@ -28,13 +28,13 @@ class App extends Component {
         return <Login key='explanation' stateTransition={this.stateTransitionCb(AppState.SESSION_CHECK)}/>
 
       case AppState.SESSION_CHECK:
-        return <SessionCheck key='sessionCheck'/>
+        return <SessionCheck key='sessionCheck' user={this.state.user}/>
 
       case AppState.PERSONAL_INFO:
         return <PersonalInfo key='personalInfo'/>
 
       case AppState.SESSION_IN_PROGRESS:
-        return <QuestionSession key='questionSession'/>
+        return <QuestionSession key='questionSession' user={this.state.user}/>
 
       default:
         return <div>Invalid state.</div>

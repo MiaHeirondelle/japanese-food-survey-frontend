@@ -4,6 +4,5 @@ export function extractUrlEncodedFormData(form) {
     acc[id] = value;
     return acc;
   }, {})
-  console.log(result);
   return new URLSearchParams(result);
 }
