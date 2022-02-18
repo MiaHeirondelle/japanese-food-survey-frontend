@@ -22,6 +22,13 @@ class SessionCheck extends Component {
     );
   }
 
+  // todo: remove hack
+  componentDidMount() {
+    if (this.props.session.status === SessionStatus.IN_PROGRESS) {
+      this.props.stateTransitionCb();
+    }
+  }
+
   renderContent() {
     switch (this.props.session.status) {
       case SessionStatus.NOT_CREATED:
@@ -36,7 +43,7 @@ class SessionCheck extends Component {
         if (this.props.session.containsPendingRespondent(this.props.user))
           return <JoinSession onJoinCb={this.props.refreshCb}/>;
         else if (this.props.session.containsParticipant(this.props.user))
-          return <SessionView user={this.props.user} session={this.props.session}/>;
+          return <SessionView user={this.props.user} session={this.props.session} onBeginCb={this.props.stateTransitionCb}/>;
         else
           return <CantJoinSession/>;
       default:
