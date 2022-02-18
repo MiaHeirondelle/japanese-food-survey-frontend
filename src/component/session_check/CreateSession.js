@@ -15,7 +15,8 @@ class CreateSession extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // local: '95b29f26-2116-4a5c-a311-405b721a2a61
+        // local:
+        // respondents: ['95b29f26-2116-4a5c-a311-405b721a2a61']
         respondents: ['f3df3662-b704-45ec-a88d-6b105e6962f3']
       })
     });
