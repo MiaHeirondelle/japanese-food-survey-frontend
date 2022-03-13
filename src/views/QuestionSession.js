@@ -22,7 +22,6 @@ class QuestionSession extends Component {
 
     if (form.checkValidity() === true) {
       const formValues = extractUrlEncodedFormData(form);
-      console.log(formValues);
     }
   }
 

@@ -40,7 +40,7 @@ class App extends Component {
         return <Login key='explanation' stateTransitionCb={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSession)}/>;
 
       case AppState.SESSION_CHECK:
-        return <SessionCheck key='sessionCheck' session={this.state.session} user={this.state.user} refreshCb={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSession)} stateTransitionCb={this.stateTransitionCb(AppState.SESSION_IN_PROGRESS)}/>;
+        return <SessionCheck key='sessionCheck' session={this.state.session} user={this.state.user} stateTransitionCb={this.stateTransitionCb(AppState.SESSION_IN_PROGRESS)}/>;
 
       case AppState.PERSONAL_INFO:
         return <PersonalInfo key='personalInfo'/>;
