@@ -8,9 +8,8 @@ import CantJoinSession from "../component/session_check/CantJoinSession";
 import NoSession from "../component/session_check/NoSession";
 import {UserRole} from "../model/user/UserRole";
 import CreateSession from "../component/session_check/CreateSession";
-import config from "../config";
-import User from "../model/user/User";
-import Session from "../model/session/Session";
+import * as client from "../client/client"
+
 
 const SessionCheckState = {
   DEFAULT: 'default',
@@ -31,19 +30,6 @@ class SessionCheck extends Component {
     }
   }
 
-  async loadRespondents() {
-    const response = await fetch(`${config['backend']['uri']}/user/respondent/get/all`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-    if (response.ok) {
-      const usersJson = await response.json();
-      return usersJson.users.map(u => new User(u.id, u.name, u.role));
-    } else {
-      return [];
-    }
-  }
-
   async updateFromSession(session) {
     if (session.status === SessionStatus.IN_PROGRESS) {
       this.props.stateTransitionCb();
@@ -51,7 +37,7 @@ class SessionCheck extends Component {
       switch (session.status) {
         case SessionStatus.NOT_CREATED:
           if (this.props.user.role === UserRole.ADMIN) {
-            const respondents = await this.loadRespondents();
+            const respondents = await client.getAllRespondents();
             this.setState({
               state: SessionCheckState.CREATE_SESSION,
               session: session,
@@ -90,7 +76,7 @@ class SessionCheck extends Component {
   }
 
   async reload() {
-    const session = await this.getSession();
+    const session = await client.getSession();
     await this.updateFromSession(session);
   }
 
@@ -129,20 +115,6 @@ class SessionCheck extends Component {
         return <WaitingToStartSession user={this.props.user} session={this.state.session}
                                       onBeginCb={this.props.stateTransitionCb}/>;
     }
-  }
-
-  async getSession() {
-    const response = await fetch(`${config['backend']['uri']}/session`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-    const sessionJson = await response.json();
-    return new Session(
-      sessionJson.joined_users,
-      sessionJson.awaiting_users,
-      sessionJson.admin,
-      sessionJson.status
-    );
   }
 }
 

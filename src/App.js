@@ -5,8 +5,8 @@ import Login from './views/Login';
 import SessionCheck from "./views/SessionCheck";
 import PersonalInfo from "./views/PersonalInfo";
 import QuestionSession from "./views/QuestionSession";
-import config from "./config";
-import Session from "./model/session/Session";
+import * as client from "./client/client"
+
 
 class App extends Component {
   constructor(props) {
@@ -37,10 +37,12 @@ class App extends Component {
   render() {
     switch (this.state.name) {
       case AppState.LOGIN:
-        return <Login key='explanation' stateTransitionCb={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSession)}/>;
+        return <Login key='explanation'
+                      stateTransitionCb={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSessionState)}/>;
 
       case AppState.SESSION_CHECK:
-        return <SessionCheck key='sessionCheck' session={this.state.session} user={this.state.user} stateTransitionCb={this.stateTransitionCb(AppState.SESSION_IN_PROGRESS)}/>;
+        return <SessionCheck key='sessionCheck' session={this.state.session} user={this.state.user}
+                             stateTransitionCb={this.stateTransitionCb(AppState.SESSION_IN_PROGRESS)}/>;
 
       case AppState.PERSONAL_INFO:
         return <PersonalInfo key='personalInfo'/>;
@@ -53,20 +55,9 @@ class App extends Component {
     }
   }
 
-  async getSession() {
-    const response = await fetch(`${config['backend']['uri']}/session`, {
-      method: 'GET',
-      credentials: 'include'
-    });
-    const sessionJson = await response.json();
-    return {
-      session: new Session(
-        sessionJson.joined_users,
-        sessionJson.awaiting_users,
-        sessionJson.admin,
-        sessionJson.status
-      )
-    }
+  async getSessionState() {
+    const session = await client.getSession();
+    return {session};
   }
 }
 

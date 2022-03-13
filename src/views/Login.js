@@ -2,10 +2,10 @@ import React, {Component} from 'react'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {extractUrlEncodedFormData} from '../util/FormUtil';
-
-import config from '../config.js';
 import LoginForm from '../component/LoginForm';
 import User from "../model/user/User";
+import * as client from "../client/client"
+
 
 class Login extends Component {
   // Expects `stateTransitionCb` function.
@@ -16,21 +16,9 @@ class Login extends Component {
     }
   }
 
-  async login(formData) {
-    const response = await fetch(`${config['backend']['uri']}/auth/login`, {
-      method: 'POST',
-      credentials: 'include',
-      body: formData
-    });
-    const userJson = await response.json();
-    return new User(userJson.id, userJson.name, userJson.role);
-  }
-
+  // todo: after view render check if already logged in
   async componentDidMount() {
-    const response = await fetch(`${config['backend']['uri']}/auth/check`, {
-      method: 'GET',
-      credentials: 'include'
-    });
+    const response = await client.authCheck();
     if (response.ok) {
       const userJson = await response.json();
       const user = new User(userJson.id, userJson.name, userJson.role);
@@ -40,8 +28,6 @@ class Login extends Component {
     }
   }
 
-  // todo: after view render check if already logged in
-
   async loginStateTransition(formEvent) {
     formEvent.preventDefault();
     formEvent.stopPropagation();
@@ -49,7 +35,7 @@ class Login extends Component {
 
     if (form.checkValidity() === true) {
       const formValues = extractUrlEncodedFormData(form);
-      const user = await this.login(formValues);
+      const user = await client.login(formValues);
       form.reset();
       window.scrollTo(0, 0);
       this.props.stateTransitionCb({user});
