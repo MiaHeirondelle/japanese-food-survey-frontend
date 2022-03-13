@@ -1,14 +1,12 @@
 import {Component} from 'react';
-import DropdownMultiselect from 'react-multiselect-dropdown-bootstrap';
+import Multiselect from 'multiselect-react-dropdown';
 
 class MultiSelector extends Component {
 
-  // expects 'values', a list of object with 'key' and 'label' fields, 'name', 'onChangeCb'
-
+  // expects 'options', a list of object with 'id' and 'name' fields, 'name', 'onChangeCb'
   render() {
-    console.log(this.props.values)
     return <div>
-      <DropdownMultiselect options={this.props.values} name={this.props.name} handleOnChange={this.props.onChangeCb}/>
+      <Multiselect options={this.props.options} displayValue='name' name={this.props.name} onSelect={this.props.onSelectCb}/>
     </div>;
   }
 }

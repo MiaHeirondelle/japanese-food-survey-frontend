@@ -6,9 +6,15 @@ import config from "../../config";
 import MultiSelector from "../common/MultiSelector";
 
 class CreateSession extends Component {
-  // expects 'users', 'onCreateCb'
+  // expects 'respondents', 'onCreateCb'
+  constructor(props) {
+    super(props);
+    this.respondentOptions = this.props.respondents.map(u => { return { id: u.id, name: u.name } });
+    this.selectedRespondents = [];
+  }
 
-  async createSession() {
+
+  async createSession(respondentIds) {
     await fetch(`${config['backend']['uri']}/session/create`, {
       method: 'POST',
       credentials: 'include',
@@ -16,28 +22,26 @@ class CreateSession extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // local:
-        // respondents: ['95b29f26-2116-4a5c-a311-405b721a2a61']
-        respondents: ['f3df3662-b704-45ec-a88d-6b105e6962f3']
+        respondents: respondentIds
       })
     });
   }
 
   async onClick() {
-    await this.createSession();
+    await this.createSession(this.selectedRespondents.map(u => u.id));
     this.props.onCreateCb();
   }
 
   onSelectedUsersChange(users) {
-    console.log(users)
+    this.selectedRespondents = users;
   }
 
   render() {
     return (
       <Row>
         <Col>
-          <MultiSelector values={[{key: "tes1", label: "name1"}, {key: "test2", label: "name2"}]} name="userSelector"
-                         onChangeCb={this.onSelectedUsersChange}/>
+          <MultiSelector options={this.respondentOptions} name="respondentSelector"
+                         onSelectCb={this.onSelectedUsersChange.bind(this)}/>
           <Button variant='primary' onClick={this.onClick.bind(this)}>Create session</Button>
         </Col>
       </Row>

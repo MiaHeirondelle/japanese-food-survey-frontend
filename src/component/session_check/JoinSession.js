@@ -9,7 +9,7 @@ class JoinSession extends Component {
   async joinSession() {
     await fetch(`${config['backend']['uri']}/session/join`, {
       method: 'POST',
-      credentials: 'include',
+      credentials: 'include'
     });
   }
 

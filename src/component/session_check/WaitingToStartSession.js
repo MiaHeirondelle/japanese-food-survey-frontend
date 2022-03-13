@@ -4,7 +4,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import config from "../../config";
 
-class SessionView extends Component {
+class WaitingToStartSession extends Component {
   // expects 'user', 'session', 'onBeginCb'
 
   async beginSession() {
@@ -42,4 +42,4 @@ class SessionView extends Component {
   }
 }
 
-export default SessionView;
+export default WaitingToStartSession;
