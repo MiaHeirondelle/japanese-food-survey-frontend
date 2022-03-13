@@ -2,20 +2,13 @@ import React, {Component} from "react";
 import Button from "react-bootstrap/Button"
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import config from "../../config";
+import * as client from "../../client/client"
 
 class WaitingToStartSession extends Component {
   // expects 'user', 'session', 'onBeginCb'
 
-  async beginSession() {
-    await fetch(`${config['backend']['uri']}/session/begin`, {
-      method: 'POST',
-      credentials: 'include'
-    });
-  }
-
   async onBegin() {
-    await this.beginSession();
+    await client.beginSession();
     this.props.onBeginCb();
   }
 
@@ -25,7 +18,8 @@ class WaitingToStartSession extends Component {
         <Col>
           <b>Waiting for session to start.</b>
           <br/>
-          <Button hidden={!this.isAdminComponent()} disabled={!this.isReadyToStart()} variant='primary' onClick={this.onBegin.bind(this)}>Begin
+          <Button hidden={!this.isAdminComponent()} disabled={!this.isReadyToStart()} variant='primary'
+                  onClick={this.onBegin.bind(this)}>Begin
             session</Button>
         </Col>
       </Row>
