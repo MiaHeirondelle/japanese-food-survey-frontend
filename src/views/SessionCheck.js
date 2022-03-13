@@ -38,12 +38,11 @@ class SessionCheck extends Component {
           return <NoSession/>;
       case SessionStatus.AWAITING_USERS:
       case SessionStatus.CAN_BEGIN:
-        console.log(this.props.session);
-        console.log(this.props.user);
         if (this.props.session.containsPendingRespondent(this.props.user))
           return <JoinSession onJoinCb={this.props.refreshCb}/>;
         else if (this.props.session.containsParticipant(this.props.user))
-          return <SessionView user={this.props.user} session={this.props.session} onBeginCb={this.props.stateTransitionCb}/>;
+          return <SessionView user={this.props.user} session={this.props.session}
+                              onBeginCb={this.props.stateTransitionCb}/>;
         else
           return <CantJoinSession/>;
       default:
