@@ -11,11 +11,11 @@ class Session {
   }
 
   containsPendingRespondent(user) {
-    return this.pendingRespondents.includes(user.id);
+    return this.pendingRespondents.some((u) => u.id === user.id);
   }
 
   containsCurrentRespondent(user) {
-    return this.currentRespondents.includes(user.id);
+    return this.currentRespondents.some((u) => u.id === user.id);
   }
 
   containsRespondent(user) {
@@ -23,11 +23,20 @@ class Session {
   }
 
   containsAdmin(user) {
-    return this.admin === user.id;
+    return this.admin.id === user.id;
   }
 
   containsParticipant(user) {
     return this.containsCurrentRespondent(user) || this.containsAdmin(user);
+  }
+
+  static fromJson(sessionJson) {
+    return new Session(
+      sessionJson.joined_users,
+      sessionJson.awaiting_users,
+      sessionJson.admin,
+      sessionJson.status
+    );
   }
 }
 

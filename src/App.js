@@ -56,7 +56,7 @@ class App extends Component {
   }
 
   async getSessionState() {
-    const session = await client.getSession();
+    const session = await client.getActiveSession();
     return {session};
   }
 }

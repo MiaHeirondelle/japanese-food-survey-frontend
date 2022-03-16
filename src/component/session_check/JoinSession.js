@@ -5,11 +5,11 @@ import Row from "react-bootstrap/Row";
 import * as client from "../../client/client"
 
 class JoinSession extends Component {
-  // expects 'onJoinCb'
+  // expects 'onJoinCb' (session) => unit
 
   async onClick() {
-    await client.joinSession();
-    this.props.onJoinCb();
+    const session = await client.joinSession();
+    this.props.onJoinCb(session);
   }
 
   render() {
