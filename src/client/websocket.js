@@ -1,7 +1,7 @@
 import config from "../config";
 
 const backendUrl = new URL(config['backend']['uri']);
-backendUrl.protocol = backendUrl.protocol === 'https' ? 'wss' : 'ws';
+backendUrl.protocol = backendUrl.protocol === 'https:' ? 'wss' : 'ws';
 const socketUrl = backendUrl.href;
 
 export function sendBeginSession(socket) {
