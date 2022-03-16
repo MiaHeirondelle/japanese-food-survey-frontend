@@ -18,10 +18,8 @@ class Login extends Component {
 
   // todo: after view render check if already logged in
   async componentDidMount() {
-    const response = await client.authCheck();
-    if (response.ok) {
-      const userJson = await response.json();
-      const user = new User(userJson.id, userJson.name, userJson.role);
+    const user = await client.authCheck();
+    if (user) {
       this.props.stateTransitionCb({user});
     } else {
       this.setState({formDisabled: false})

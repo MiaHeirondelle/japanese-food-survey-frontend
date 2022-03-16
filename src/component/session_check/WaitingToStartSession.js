@@ -2,14 +2,13 @@ import React, {Component} from "react";
 import Button from "react-bootstrap/Button"
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import * as client from "../../client/client"
+import * as websocketClient from "../../client/websocket";
 
 class WaitingToStartSession extends Component {
-  // expects 'user', 'session', 'onBeginCb'
+  // expects 'user', 'session', 'socket'
 
   async onBegin() {
-    await client.beginSession();
-    this.props.onBeginCb();
+    websocketClient.sendBeginSession(this.props.socket);
   }
 
   render() {

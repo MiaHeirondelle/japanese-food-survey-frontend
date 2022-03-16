@@ -7,6 +7,10 @@ class User {
     this.name = name;
     this.role = role;
   }
+
+  static fromJson(userJson) {
+    return new User(userJson.id, userJson.name, userJson.role);
+  }
 }
 
 export default User;

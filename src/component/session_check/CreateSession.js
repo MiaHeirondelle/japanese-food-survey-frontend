@@ -6,7 +6,7 @@ import MultiSelector from "../common/MultiSelector";
 import * as client from "../../client/client"
 
 class CreateSession extends Component {
-  // expects 'respondents', 'onCreateCb'
+  // expects 'respondents', 'onCreateCb' (session) => unit
   constructor(props) {
     super(props);
     this.respondentOptions = this.props.respondents.map(u => {
@@ -16,8 +16,8 @@ class CreateSession extends Component {
   }
 
   async onClick() {
-    await client.createSession(this.selectedRespondents.map(u => u.id));
-    this.props.onCreateCb();
+    const session = await client.createSession(this.selectedRespondents.map(u => u.id));
+    this.props.onCreateCb(session);
   }
 
   onSelectedUsersChange(users) {

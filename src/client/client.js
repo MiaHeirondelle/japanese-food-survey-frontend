@@ -2,37 +2,40 @@ import config from "../config";
 import Session from "../model/session/Session";
 import User from "../model/user/User";
 
+const backendUrl = config['backend']['uri'];
+
 export async function joinSession() {
-  return sendRequest('POST', 'session/join');
-}
-
-export async function beginSession() {
-  return sendRequest('POST', 'session/begin');
-}
-
-export async function getSession() {
-  const response = await sendRequest('GET', 'session');
+  const response = await sendRequest('POST', 'session/join');
   const sessionJson = await response.json();
-  return new Session(
-    sessionJson.joined_users,
-    sessionJson.awaiting_users,
-    sessionJson.admin,
-    sessionJson.status
-  );
+  return Session.fromJson(sessionJson);
+}
+
+export async function getActiveSession() {
+  const response = await sendRequest('GET', 'session/active');
+  const sessionJson = await response.json();
+  return Session.fromJson(sessionJson);
 }
 
 export async function createSession(respondentIds) {
-  return sendJsonRequest('POST', 'session/create', { respondents: respondentIds });
+  const response = await sendJsonRequest('POST', 'session/create', { respondents: respondentIds });
+  const sessionJson = await response.json();
+  return Session.fromJson(sessionJson);
 }
 
 export async function login(formData) {
   const response = await sendRequest('POST', 'auth/login', formData);
   const userJson = await response.json();
-  return new User(userJson.id, userJson.name, userJson.role);
+  return User.fromJson(userJson);
 }
 
 export async function authCheck() {
-  return sendRequest('GET', 'auth/check');
+  const response = await sendRequest('GET', 'auth/check');
+  if (response.ok) {
+    const userJson = await response.json();
+    return User.fromJson(userJson);
+  } else {
+    return null;
+  }
 }
 
 export async function getAllRespondents() {
@@ -46,7 +49,7 @@ export async function getAllRespondents() {
 }
 
 async function sendRequest(method, path, body) {
-  return fetch(`${config['backend']['uri']}/${path}`, {
+  return fetch(`${backendUrl}/${path}`, {
     method: method,
     credentials: 'include',
     body: body
@@ -54,7 +57,7 @@ async function sendRequest(method, path, body) {
 }
 
 async function sendJsonRequest(method, path, body) {
-  return fetch(`${config['backend']['uri']}/${path}`, {
+  return fetch(`${backendUrl}/${path}`, {
     method: method,
     credentials: 'include',
     headers: {

@@ -8,7 +8,11 @@ import CantJoinSession from "../component/session_check/CantJoinSession";
 import NoSession from "../component/session_check/NoSession";
 import {UserRole} from "../model/user/UserRole";
 import CreateSession from "../component/session_check/CreateSession";
-import * as client from "../client/client"
+import * as client from "../client/client";
+import * as websocketClient from "../client/websocket";
+import Session from "../model/session/Session";
+import User from "../model/user/User";
+import {displayInfoPopup} from "../util/PopupUtil";
 
 
 const SessionCheckState = {
@@ -26,7 +30,8 @@ class SessionCheck extends Component {
     super(props);
     this.state = {
       state: SessionCheckState.DEFAULT,
-      session: props.session
+      session: props.session,
+      socket: null
     }
   }
 
@@ -41,31 +46,37 @@ class SessionCheck extends Component {
             this.setState({
               state: SessionCheckState.CREATE_SESSION,
               session: session,
-              respondents: respondents
+              respondents: respondents,
+              socket: this.state.socket
             });
           } else
             this.setState({
               state: SessionCheckState.NO_SESSION,
-              session: session
+              session: session,
+              socket: this.state.socket
             });
           break;
 
         case SessionStatus.AWAITING_USERS:
         case SessionStatus.CAN_BEGIN:
-          if (session.containsPendingRespondent(this.props.user))
+          if (session.containsPendingRespondent(this.props.user)) {
             this.setState({
               state: SessionCheckState.JOIN_SESSION,
-              session: session
+              session: session,
+              socket: this.state.socket
             });
-          else if (session.containsParticipant(this.props.user))
+          } else if (session.containsParticipant(this.props.user)) {
+            const websocket = await this.getOrCreateSessionWebsocket();
             this.setState({
               state: SessionCheckState.WAITING_TO_START_SESSION,
-              session: session
+              session: session,
+              socket: websocket
             });
-          else
+          } else
             this.setState({
               state: SessionCheckState.CANT_JOIN_SESSION,
-              session: session
+              session: session,
+              socket: this.state.socket
             });
           break;
 
@@ -75,13 +86,61 @@ class SessionCheck extends Component {
     }
   }
 
-  async reload() {
-    const session = await client.getSession();
-    await this.updateFromSession(session);
-  }
-
   async componentDidMount() {
     await this.updateFromSession(this.state.session);
+  }
+
+  async connectToSession(session) {
+    await this.updateFromSession(session);
+    const websocket = this.getOrCreateSessionWebsocket();
+    this.setState((previousState) => {
+      return { ...previousState, socket: websocket };
+    });
+  }
+
+  async getOrCreateSessionWebsocket() {
+    if (this.state.socket)
+      return this.state.socket;
+    else
+      return await this.createSessionWebsocket();
+  }
+
+  async createSessionWebsocket() {
+    const websocket = await websocketClient.connectToSession();
+    this.setWebSocketCallbacks(websocket);
+    return websocket;
+  }
+
+  setWebSocketCallbacks(socket) {
+    const self = this;
+    socket.onmessage = async function(event) {
+      const message = JSON.parse(event.data);
+      switch (message.type) {
+        case 'user_joined':
+          const session = Session.fromJson(message.session);
+          const user = User.fromJson(message.user);
+          await self.updateFromSession(session);
+          if (user.id !== self.props.user.id) {
+            displayInfoPopup(`User [${user.name}] joined!`)
+          }
+          break;
+        case 'session_began':
+          socket.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            console.log('Skipping socket message', message);
+          }
+          self.props.stateTransitionCb({socket});
+          break;
+        default:
+          console.error('Unknown message type', message);
+      }
+    }
+    socket.onerror = function(event) {
+      console.error('error', event);
+    }
+    socket.onclose = function(event) {
+      console.log('disconnected', event)
+    }
   }
 
   render() {
@@ -103,17 +162,16 @@ class SessionCheck extends Component {
         return <CantJoinSession/>;
 
       case SessionCheckState.CREATE_SESSION:
-        return <CreateSession respondents={this.state.respondents} onCreateCb={this.reload.bind(this)}/>;
+        return <CreateSession respondents={this.state.respondents} onCreateCb={this.connectToSession.bind(this)}/>;
 
       case SessionCheckState.JOIN_SESSION:
-        return <JoinSession onJoinCb={this.reload.bind(this)}/>;
+        return <JoinSession onJoinCb={this.connectToSession.bind(this)}/>;
 
       case SessionCheckState.NO_SESSION:
         return <NoSession/>
 
       case SessionCheckState.WAITING_TO_START_SESSION:
-        return <WaitingToStartSession user={this.props.user} session={this.state.session}
-                                      onBeginCb={this.props.stateTransitionCb}/>;
+        return <WaitingToStartSession user={this.props.user} session={this.state.session} socket={this.state.socket}/>;
     }
   }
 }
