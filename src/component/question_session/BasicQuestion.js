@@ -6,7 +6,7 @@ import QuestionTimer from "./QuestionTimer";
 import BasicQuestionForm from "./BasicQuestionForm";
 
 class BasicQuestion extends Component {
-  // Expects 'onSubmit, 'pageNumber', 'questionModel'
+  // Expects 'onSubmit, 'pageNumber', 'elementNumber', 'questionModel'
   constructor(props) {
     super(props);
   }
@@ -15,7 +15,7 @@ class BasicQuestion extends Component {
     return <Row className='StretchContainer mt-lg-3 mx-lg-4'>
       <Row>
         <Col className='col-lg-10 '>
-          <h4>{this.props.pageNumber}練習:質問{this.props.questionModel.questionNumber}・{this.props.questionModel.questionNumber + 1}の回答</h4>
+          <h4>{this.props.pageNumber}練習:質問{this.props.elementNumber}・{this.props.elementNumber + 1}の回答</h4>
         </Col>
         <Col className='col-lg-2'>
           <QuestionTimer startFromS={60} intervalS={1}/>
@@ -31,7 +31,7 @@ class BasicQuestion extends Component {
           それではどうぞ！
         </Col>
       </Row>
-      <BasicQuestionForm formId={`form-${this.props.questionModel.questionId}`} questionModel={this.props.questionModel}
+      <BasicQuestionForm formId={`form-${this.props.questionModel.id}`} questionModel={this.props.questionModel}
                          onSubmit={this.props.onSubmit}/>
     </Row>
   }

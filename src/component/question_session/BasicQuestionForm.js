@@ -15,7 +15,7 @@ class BasicQuestionForm extends Component {
             <Row><h4>質問１</h4></Row>
             <Row>
               <Col className='col-lg-6'>
-                <span className='ImportantText'>{this.props.questionModel.questionText}</span>
+                <span className='ImportantText'>{this.props.questionModel.text}</span>
               </Col>
               <Col className='col-lg-6'>
                 <Row>
