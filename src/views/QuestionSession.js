@@ -1,18 +1,21 @@
 import {Component} from "react";
-import {QuestionSessionState} from "../model/session/QuestionSessionState";
-import BasicQuestion from "../component/BasicQuestion";
-import BasicQuestionModel from "../model/BasicQuestionModel";
+import {QuestionType} from "../model/session/QuestionType";
+import BasicQuestion from "../component/question_session/BasicQuestion";
+import BasicQuestionModel from "../model/question/BasicQuestionModel";
 import {extractUrlEncodedFormData} from "../util/FormUtil";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
+import {ElementType} from "../model/session/ElementType";
 
 class QuestionSession extends Component {
 
-  // Expects: `stateTransition` function,
-  // State: sessionState
+  // Expects: `user` `socket` `session`
+  // State: session
   constructor(props) {
     super(props);
-    this.sessionState = QuestionSessionState.BASIC_QUESTION;
+    this.state = {
+      session: this.props.session
+    }
   }
 
   onSubmit(formEvent) {
@@ -26,25 +29,29 @@ class QuestionSession extends Component {
   }
 
   render() {
-    switch (this.sessionState) {
-      case QuestionSessionState.BASIC_QUESTION:
-        const questionModel = new BasicQuestionModel(
-          'QuestionId',
-          1,
-          'あなたは、「涙の出ないタマネギ」を\n食べてみたいと思いますか？',
-          'まったく\n食べたくない',
-          'とても\n食べてみつぃ'
-        )
-        return (
-          <Col className='FullHeightContent StretchContent'>
-            <ScreenCutoffBar/>
-            <BasicQuestion pageNumber={0} questionModel={questionModel} onSubmit={this.onSubmit.bind(this)}/>
-            <ScreenCutoffBar/>
-          </Col>
-        );
+    const session = this.state.session;
+    const elementNumber = session.current_element_number;
+    const element = session.template.elements[elementNumber];
+    switch (element.type) {
+      case ElementType.QUESTION:
+        const question = element.question;
+        switch (question.type) {
+          case QuestionType.BASIC:
+            const questionModel = BasicQuestionModel.fromJson(question);
+            return (
+              <Col className='FullHeightContent StretchContent'>
+                <ScreenCutoffBar/>
+                <BasicQuestion pageNumber={0} questionModel={questionModel} elementNumber={elementNumber} onSubmit={this.onSubmit.bind(this)}/>
+                <ScreenCutoffBar/>
+              </Col>
+            );
+
+          default:
+            return 'Unknown question type';
+        }
 
       default:
-        return 'Unknown state';
+        return 'Unknown element type';
     }
   }
 }

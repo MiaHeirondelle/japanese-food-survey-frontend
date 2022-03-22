@@ -129,7 +129,7 @@ class SessionCheck extends Component {
             const message = JSON.parse(event.data);
             console.log('Skipping socket message', message);
           }
-          self.props.stateTransitionCb({socket});
+          self.props.stateTransitionCb({socket, session: message.session});
           break;
         default:
           console.error('Unknown message type', message);
