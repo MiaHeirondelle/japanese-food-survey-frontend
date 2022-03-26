@@ -117,19 +117,20 @@ class SessionCheck extends Component {
       const message = JSON.parse(event.data);
       switch (message.type) {
         case 'user_joined':
-          const session = Session.fromJson(message.session);
+          const userJoinedSession = Session.fromJson(message.session);
           const user = User.fromJson(message.user);
-          await self.updateFromSession(session);
+          await self.updateFromSession(userJoinedSession);
           if (user.id !== self.props.user.id) {
             displayInfoPopup(`User [${user.name}] joined!`)
           }
           break;
         case 'session_began':
+          const beganSession = Session.fromJson(message.session);
           socket.onmessage = function(event) {
             const message = JSON.parse(event.data);
             console.log('Skipping socket message', message);
           }
-          self.props.stateTransitionCb({socket, session: message.session});
+          self.props.stateTransitionCb({socket, session: beganSession});
           break;
         default:
           console.error('Unknown message type', message);

@@ -30,7 +30,7 @@ class QuestionSession extends Component {
 
   render() {
     const session = this.state.session;
-    const elementNumber = session.current_element_number;
+    const elementNumber = session.currentElementNumber;
     const element = session.template.elements[elementNumber];
     switch (element.type) {
       case ElementType.QUESTION:

@@ -3,11 +3,15 @@ class Session {
     currentRespondents,
     pendingRespondents,
     admin,
-    status) {
+    status,
+    currentElementNumber,
+    template) {
     this.currentRespondents = currentRespondents || [];
     this.pendingRespondents = pendingRespondents || [];
     this.admin = admin;
     this.status = status;
+    this.currentElementNumber = currentElementNumber;
+    this.template = template;
   }
 
   containsPendingRespondent(user) {
@@ -35,7 +39,9 @@ class Session {
       sessionJson.joined_users,
       sessionJson.awaiting_users,
       sessionJson.admin,
-      sessionJson.status
+      sessionJson.status,
+      sessionJson.current_element_number,
+      sessionJson.template
     );
   }
 }
