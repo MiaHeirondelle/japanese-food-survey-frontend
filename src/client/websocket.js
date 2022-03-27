@@ -11,6 +11,13 @@ export function sendBeginSession(socket) {
   socket.send(JSON.stringify(json));
 }
 
+export function sendReadyForNextElement(socket) {
+  const json = {
+    'type': 'ready_for_next_element'
+  }
+  socket.send(JSON.stringify(json));
+}
+
 export async function connectToSession() {
   return await connect('session/connect');
 }
