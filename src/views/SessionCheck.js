@@ -31,13 +31,19 @@ class SessionCheck extends Component {
     this.state = {
       state: SessionCheckState.DEFAULT,
       session: props.session,
-      socket: null
+      socket: undefined
     }
   }
 
+  // todo: bug with 2 websockets
   async updateFromSession(session) {
     if (session.status === SessionStatus.IN_PROGRESS) {
-      this.props.stateTransitionCb();
+      if (this.state.socket === undefined) {
+        const socket = await websocketClient.connectToSession();
+        this.props.stateTransitionCb({session, socket});
+      } else {
+        this.props.stateTransitionCb({session, socket: this.state.socket});
+      }
     } else {
       switch (session.status) {
         case SessionStatus.NOT_CREATED:
@@ -106,9 +112,9 @@ class SessionCheck extends Component {
   }
 
   async createSessionWebsocket() {
-    const websocket = await websocketClient.connectToSession();
-    this.setWebSocketCallbacks(websocket);
-    return websocket;
+    const socket = await websocketClient.connectToSession();
+    this.setWebSocketCallbacks(socket);
+    return socket;
   }
 
   setWebSocketCallbacks(socket) {

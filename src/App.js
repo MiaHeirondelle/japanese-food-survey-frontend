@@ -48,7 +48,7 @@ class App extends Component {
         return <PersonalInfo key='personalInfo'/>;
 
       case AppState.SESSION_IN_PROGRESS:
-        return <QuestionSession key='questionSession' user={this.state.user} socket={this.state.socket} session={this.state.session}/>;
+        return <QuestionSession key='questionSession' user={this.state.user} socket={this.state.socket} session={this.state.session} sessionFinishedCb={this.asyncStateTransitionCb(AppState.SESSION_CHECK, this.getSessionState)}/>;
 
       default:
         return <div>Invalid state.</div>;
