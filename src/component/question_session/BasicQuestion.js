@@ -18,7 +18,7 @@ class BasicQuestion extends Component {
           <h4>{this.props.pageNumber}練習:質問{this.props.elementNumber}・{this.props.elementNumber + 1}の回答</h4>
         </Col>
         <Col className='col-lg-2'>
-          <QuestionTimer startFromS={60} intervalS={1} onTimeoutCb={this.props.onTimeoutCb}/>
+          <QuestionTimer startFromS={30} intervalS={1} onTimeoutCb={this.props.onTimeoutCb}/>
         </Col>
       </Row>
       <br/>
