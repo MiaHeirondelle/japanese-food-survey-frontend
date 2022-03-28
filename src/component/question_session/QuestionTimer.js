@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 
 class QuestionTimer extends Component {
 
-  // Expects: startFromS, intervalS
+  // Expects: startFromS, intervalS, onTimeoutCb
   constructor(props) {
     super(props);
     this.state = {
@@ -12,21 +12,24 @@ class QuestionTimer extends Component {
   }
 
   componentDidMount() {
+    const self = this;
     const suspendedTask = () => setInterval(() => {
-        this.setState((previousState) => {
-          const newTime = previousState.currentTimeS - this.props.intervalS
+        self.setState((previousState) => {
+          const newTime = previousState.currentTimeS - self.props.intervalS
           if (newTime > 0) {
             return {
               task: previousState.task,
-              currentTimeS: previousState.currentTimeS - this.props.intervalS
+              currentTimeS: previousState.currentTimeS - self.props.intervalS
             }
           } else {
-            clearInterval(previousState.task);
-            return {currentTimeS: 0};
+            // clearInterval(previousState.task);
+            self.props.onTimeoutCb();
+            // restart timer
+            return {currentTimeS: this.props.startFromS};
           }
         })
       },
-      this.props.intervalS * 1000
+      self.props.intervalS * 1000
     )
     this.setState({
       task: suspendedTask(),

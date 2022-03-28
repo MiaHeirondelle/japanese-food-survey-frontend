@@ -8,14 +8,14 @@ export function sendBeginSession(socket) {
   const json = {
     'type': 'begin_session'
   }
-  socket.send(JSON.stringify(json));
+  sendMessage(socket, JSON.stringify(json));
 }
 
 export function sendReadyForNextElement(socket) {
   const json = {
     'type': 'ready_for_next_element'
   }
-  socket.send(JSON.stringify(json));
+  sendMessage(socket, JSON.stringify(json));
 }
 
 export function provideQuestionAnswer(socket, questionId, scaleValue, comment) {
@@ -25,7 +25,7 @@ export function provideQuestionAnswer(socket, questionId, scaleValue, comment) {
     'scale_value': scaleValue,
     'comment': comment
   }
-  socket.send(JSON.stringify(json));
+  sendMessage(socket, JSON.stringify(json));
 }
 
 export async function connectToSession() {
@@ -34,4 +34,16 @@ export async function connectToSession() {
 
 async function connect(path) {
   return new WebSocket(`${socketUrl}${path}`);
+}
+
+function sendMessage(socket, message) {
+  waitForConnection(socket, () => socket.send(message), 1000);
+}
+
+function waitForConnection(socket, callback, interval) {
+  if (socket.readyState === 1) {
+    callback();
+  } else {
+    setTimeout(() => waitForConnection(socket, callback, interval), interval);
+  }
 }
