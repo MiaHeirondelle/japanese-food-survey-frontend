@@ -2,7 +2,7 @@ import {Component} from "react";
 import {QuestionType} from "../model/session/QuestionType";
 import BasicQuestion from "../component/question_session/BasicQuestion";
 import BasicQuestionModel from "../model/question/BasicQuestionModel";
-import {extractFormData, extractUrlEncodedFormData} from "../util/FormUtil";
+import {extractFormData} from "../util/FormUtil";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
 import {ElementType} from "../model/session/ElementType";
@@ -22,11 +22,13 @@ class QuestionSession extends Component {
       element: undefined
     }
     const self = this;
-    this.props.socket.onmessage = async function(event) {
+    this.props.socket.onmessage = async function (event) {
       const message = JSON.parse(event.data);
       switch (message.type) {
         case 'element_selected':
-          self.setState((previousState) => { return { ... previousState, element: message.element} });
+          self.setState((previousState) => {
+            return {...previousState, element: message.element}
+          });
           break;
         case 'user_joined':
           const user = User.fromJson(message.user);
@@ -45,7 +47,7 @@ class QuestionSession extends Component {
   }
 
   async componentDidMount() {
-    await websocketClient.sendReadyForNextElement(this.state.socket);
+    websocketClient.sendReadyForNextElement(this.state.socket);
   }
 
   async onSubmit(formEvent) {
@@ -73,7 +75,8 @@ class QuestionSession extends Component {
               return (
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>
-                  <BasicQuestion pageNumber={0} questionModel={questionModel} elementNumber={element.number} onSubmit={this.onSubmit.bind(this)}/>
+                  <BasicQuestion pageNumber={0} questionModel={questionModel} elementNumber={element.number}
+                                 onSubmit={this.onSubmit.bind(this)} onTimeoutCb={this.onTimeout.bind(this)}/>
                   <ScreenCutoffBar/>
                 </Col>
               );
@@ -88,6 +91,11 @@ class QuestionSession extends Component {
     } else {
       return null;
     }
+  }
+
+  onTimeout() {
+    // todo: remove hack
+    websocketClient.sendReadyForNextElement(this.state.socket);
   }
 }
 
