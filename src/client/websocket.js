@@ -18,6 +18,16 @@ export function sendReadyForNextElement(socket) {
   socket.send(JSON.stringify(json));
 }
 
+export function provideQuestionAnswer(socket, questionId, scaleValue, comment) {
+  const json = {
+    'type': 'provide_answer',
+    'question_id': questionId,
+    'scale_value': scaleValue,
+    'comment': comment
+  }
+  socket.send(JSON.stringify(json));
+}
+
 export async function connectToSession() {
   return await connect('session/connect');
 }
