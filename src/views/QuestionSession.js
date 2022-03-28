@@ -2,7 +2,7 @@ import {Component} from "react";
 import {QuestionType} from "../model/session/QuestionType";
 import BasicQuestion from "../component/question_session/BasicQuestion";
 import BasicQuestionModel from "../model/question/BasicQuestionModel";
-import {extractUrlEncodedFormData} from "../util/FormUtil";
+import {extractFormData, extractUrlEncodedFormData} from "../util/FormUtil";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
 import {ElementType} from "../model/session/ElementType";
@@ -54,8 +54,10 @@ class QuestionSession extends Component {
     const form = formEvent.currentTarget;
 
     if (form.checkValidity() === true) {
-      const formValues = extractUrlEncodedFormData(form);
-      await websocketClient.sendReadyForNextElement(this.state.socket);
+      const formValues = extractFormData(form);
+      await websocketClient.provideQuestionAnswer(this.state.socket, this.state.element.question.id, formValues.likertValue, formValues.comment);
+      form.reset();
+      window.scrollTo(0, 0);
     }
   }
 
