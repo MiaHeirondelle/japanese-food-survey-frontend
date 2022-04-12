@@ -6,10 +6,15 @@ import Col from 'react-bootstrap/Col';
 
 class BasicQuestionForm extends Component {
 
+  constructor(props) {
+    super(props);
+    this.formRef = React.createRef();
+  }
+
   // Expects questionModel, formId, disabled, onSubmit function
   render() {
     return (
-      <Form className='StretchContent' id={this.props.formId} onSubmit={this.props.onSubmit}>
+      <Form className='StretchContent' id={this.props.formId} ref={this.formRef} onSubmit={this.props.onSubmit}>
         <Row className='StretchContainer'>
           <Col className='col-lg-12'>
             <Row><h4>質問１</h4></Row>
@@ -22,8 +27,7 @@ class BasicQuestionForm extends Component {
                   {
                     Array.from({length: 6}, (_, i) => i).map((i) => {
                       const id = `likert-value-${i}`;
-                      return <Col className='col-sm-2 align-content-center' key={id}><Form.Check required={true}
-                                                                                                 label={i}
+                      return <Col className='col-sm-2 align-content-center' key={id}><Form.Check label={i}
                                                                                                  name='likertValue'
                                                                                                  type='radio' value={i}
                                                                                                  id={id}/></Col>;
@@ -32,7 +36,8 @@ class BasicQuestionForm extends Component {
                 </Row>
                 <Row>
                   <Col className='col-sm-2 text-left KeepLineBreaks'>{this.props.questionModel.scaleTextLeft}</Col>
-                  <Col className='col-sm-2 offset-sm-8 text-left KeepLineBreaks'>{this.props.questionModel.scaleTextRight}</Col>
+                  <Col
+                    className='col-sm-2 offset-sm-8 text-left KeepLineBreaks'>{this.props.questionModel.scaleTextRight}</Col>
                 </Row>
               </Col>
             </Row>
@@ -55,6 +60,10 @@ class BasicQuestionForm extends Component {
         <Button className='mb-xl-5 w-100' type='submit' disabled={this.props.disabled}>Submit</Button>
       </Form>
     )
+  }
+
+  getForm() {
+    return this.formRef.current;
   }
 }
 
