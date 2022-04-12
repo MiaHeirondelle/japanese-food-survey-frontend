@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import {QuestionType} from "../model/session/QuestionType";
 import BasicQuestion from "../component/question_session/BasicQuestion";
 import BasicQuestionModel from "../model/question/BasicQuestionModel";
@@ -16,6 +16,7 @@ class QuestionSession extends Component {
   // State: session
   constructor(props) {
     super(props);
+    this.elementRef = React.createRef();
     this.state = {
       session: this.props.session,
       socket: this.props.socket,
@@ -40,6 +41,19 @@ class QuestionSession extends Component {
           self.state.socket.close();
           self.props.sessionFinishedCb();
           break;
+        case 'timer_tick':
+          if (self.elementRef.current && self.elementRef.current.setTime) {
+            self.elementRef.current.setTime(message.time_left_in_ms / 1000);
+          }
+          break;
+        case 'transition_to_next_element':
+          if (self.elementRef.current && self.elementRef.current.getForm) {
+            self.elementRef.current.setTime(0);
+            const form = self.elementRef.current.getForm();
+            await self.submitFormData(form);
+          }
+          break;
+
         default:
           console.error('Unknown message type', message);
       }
@@ -54,10 +68,13 @@ class QuestionSession extends Component {
     formEvent.preventDefault();
     formEvent.stopPropagation();
     const form = formEvent.currentTarget;
+    await this.submitFormData(form)
+  }
 
+  async submitFormData(form) {
     if (form.checkValidity() === true) {
       const formValues = extractFormData(form);
-      await websocketClient.provideQuestionAnswer(this.state.socket, this.state.element.question.id, formValues.likertValue, formValues.comment);
+      await websocketClient.provideQuestionAnswer(this.state.socket, this.state.element.question.id, formValues.likertValue, formValues.userComment);
       form.reset();
       window.scrollTo(0, 0);
     }
@@ -75,7 +92,7 @@ class QuestionSession extends Component {
               return (
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>
-                  <BasicQuestion pageNumber={0} questionModel={questionModel} elementNumber={element.number}
+                  <BasicQuestion pageNumber={0} ref={this.elementRef} questionModel={questionModel} elementNumber={element.number}
                                  onSubmit={this.onSubmit.bind(this)} onTimeoutCb={this.onTimeout.bind(this)}/>
                   <ScreenCutoffBar/>
                 </Col>

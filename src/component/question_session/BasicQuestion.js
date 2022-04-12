@@ -9,6 +9,10 @@ class BasicQuestion extends Component {
   // Expects 'onSubmit, 'pageNumber', 'elementNumber', 'questionModel', 'onTimeoutCb'
   constructor(props) {
     super(props);
+    this.formRef = React.createRef();
+    this.state = {
+      currentTimeS: 0
+    }
   }
 
   render() {
@@ -18,7 +22,7 @@ class BasicQuestion extends Component {
           <h4>{this.props.pageNumber}練習:質問{this.props.elementNumber}・{this.props.elementNumber + 1}の回答</h4>
         </Col>
         <Col className='col-lg-2'>
-          <QuestionTimer startFromS={30} intervalS={1} onTimeoutCb={this.props.onTimeoutCb}/>
+          <QuestionTimer currentTimeS={this.state.currentTimeS} onTimeoutCb={this.props.onTimeoutCb}/>
         </Col>
       </Row>
       <br/>
@@ -31,9 +35,18 @@ class BasicQuestion extends Component {
           それではどうぞ！
         </Col>
       </Row>
-      <BasicQuestionForm formId={`form-${this.props.questionModel.id}`} questionModel={this.props.questionModel}
+      <BasicQuestionForm ref={this.formRef} formId={`form-${this.props.questionModel.id}`}
+                         questionModel={this.props.questionModel}
                          onSubmit={this.props.onSubmit}/>
     </Row>
+  }
+
+  setTime(timeS) {
+    this.setState({currentTimeS: timeS});
+  }
+
+  getForm() {
+    return this.formRef.current.getForm();
   }
 }
 
