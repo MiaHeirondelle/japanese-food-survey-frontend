@@ -9,10 +9,12 @@ import {ElementType} from "../model/session/ElementType";
 import User from "../model/user/User";
 import {displayInfoPopup} from "../util/PopupUtil";
 import * as websocketClient from "../client/websocket";
+import BasicQuestionAnswerModel from "../model/question/BasicQuestionAnswerModel";
+import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
 
 class QuestionSession extends Component {
 
-  // Expects: `user` `socket` `session`, `sessionFinishedCb`
+  // Expects: user, socket, session, sessionFinishedCb`
   // State: session
   constructor(props) {
     super(props);
@@ -29,6 +31,11 @@ class QuestionSession extends Component {
         case 'question_selected':
           self.setState((previousState) => {
             return {...previousState, element: message.element}
+          });
+          break;
+        case 'basic_question_review_selected':
+          self.setState((previousState) => {
+            return {...previousState, element: message.element, answers: message.answers}
           });
           break;
         case 'user_joined':
@@ -51,6 +58,8 @@ class QuestionSession extends Component {
             self.elementRef.current.setTime(0);
             const form = self.elementRef.current.getForm();
             await self.submitFormData(form);
+          } else {
+            websocketClient.sendReadyForNextElement(self.state.socket);
           }
           break;
 
@@ -85,15 +94,33 @@ class QuestionSession extends Component {
     if (element !== undefined) {
       switch (element.type) {
         case ElementType.QUESTION:
-          const question = element.question;
-          switch (question.type) {
+          const selectedQuestion = element.question;
+          switch (selectedQuestion.type) {
             case QuestionType.BASIC:
-              const questionModel = BasicQuestionModel.fromJson(question);
+              const questionModel = BasicQuestionModel.fromJson(selectedQuestion);
               return (
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>
-                  <BasicQuestion pageNumber={0} ref={this.elementRef} questionModel={questionModel} elementNumber={element.number}
-                                 onSubmit={this.onSubmit.bind(this)} onTimeoutCb={this.onTimeout.bind(this)}/>
+                  <BasicQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} question={questionModel}
+                                 onSubmit={this.onSubmit.bind(this)}/>
+                  <ScreenCutoffBar/>
+                </Col>
+              );
+
+            default:
+              return 'Unknown question type';
+          }
+
+        case ElementType.QUESTION_REVIEW:
+          const reviewQuestion = element.question;
+          switch (reviewQuestion.type) {
+            case QuestionType.BASIC:
+              const questionModel = BasicQuestionModel.fromJson(reviewQuestion);
+              const answers = this.state.answers.map(BasicQuestionAnswerModel.fromJson);
+              return (
+                <Col className='FullHeightContent StretchContent'>
+                  <ScreenCutoffBar/>
+                  <BasicQuestionReview ref={this.elementRef} pageNumber={0} elementNumber={element.number} user={this.props.user} respondents={this.state.session.currentRespondents} question={questionModel} answers={answers}/>
                   <ScreenCutoffBar/>
                 </Col>
               );
@@ -108,11 +135,6 @@ class QuestionSession extends Component {
     } else {
       return null;
     }
-  }
-
-  onTimeout() {
-    // todo: remove hack
-    websocketClient.sendReadyForNextElement(this.state.socket);
   }
 }
 

@@ -28,6 +28,11 @@ html, body, #root {
     white-space: pre-line;
 }
 
+.CenterInlineFormChecks .form-check-inline {
+    display: flex;
+    justify-content: center;
+}
+
 .CutoffBar {
     min-height: 1vh;
     max-height: 1vh;
