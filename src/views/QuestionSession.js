@@ -26,7 +26,7 @@ class QuestionSession extends Component {
     this.props.socket.onmessage = async function (event) {
       const message = JSON.parse(event.data);
       switch (message.type) {
-        case 'element_selected':
+        case 'question_selected':
           self.setState((previousState) => {
             return {...previousState, element: message.element}
           });
