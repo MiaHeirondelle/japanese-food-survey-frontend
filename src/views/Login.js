@@ -3,7 +3,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {extractUrlEncodedFormData} from '../util/FormUtil';
 import LoginForm from '../component/LoginForm';
-import User from "../model/user/User";
 import * as client from "../client/client"
 
 
