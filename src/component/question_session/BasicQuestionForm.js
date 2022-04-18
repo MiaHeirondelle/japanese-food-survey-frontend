@@ -11,7 +11,7 @@ class BasicQuestionForm extends Component {
     this.formRef = React.createRef();
   }
 
-  // Expects questionModel, formId, disabled, onSubmit function
+  // Expects question, formId, disabled, onSubmit function
   render() {
     return (
       <Form className='StretchContent' id={this.props.formId} ref={this.formRef} onSubmit={this.props.onSubmit}>
@@ -20,24 +20,30 @@ class BasicQuestionForm extends Component {
             <Row><h4>質問１</h4></Row>
             <Row>
               <Col className='col-lg-6'>
-                <span className='ImportantText'>{this.props.questionModel.text}</span>
+                <span className='ImportantText'>{this.props.question.text}</span>
               </Col>
               <Col className='col-lg-6'>
                 <Row>
                   {
                     Array.from({length: 6}, (_, i) => i).map((i) => {
                       const id = `likert-value-${i}`;
-                      return <Col className='col-sm-2 align-content-center' key={id}><Form.Check label={i}
-                                                                                                 name='likertValue'
-                                                                                                 type='radio' value={i}
-                                                                                                 id={id}/></Col>;
+                      return <Col className='col-sm-2 align-content-center' key={id}>
+                        <Form.Check label={i}
+                                    name='likertValue'
+                                    type='radio'
+                                    value={i}
+                                    id={id}/>
+                      </Col>;
                     })
                   }
                 </Row>
                 <Row>
-                  <Col className='col-sm-2 text-left KeepLineBreaks'>{this.props.questionModel.scaleTextLeft}</Col>
-                  <Col
-                    className='col-sm-2 offset-sm-8 text-left KeepLineBreaks'>{this.props.questionModel.scaleTextRight}</Col>
+                  <Col className='col-sm-2 text-left KeepLineBreaks'>
+                    {this.props.question.scaleTextLeft.replace(' ', '\n')}
+                  </Col>
+                  <Col className='col-sm-2 offset-sm-8 text-left KeepLineBreaks'>
+                    {this.props.question.scaleTextRight.replace(' ', '\n')}
+                  </Col>
                 </Row>
               </Col>
             </Row>

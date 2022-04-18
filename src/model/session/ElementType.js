@@ -1,3 +1,4 @@
 export const ElementType = {
-  QUESTION: 'question'
+  QUESTION: 'question',
+  QUESTION_REVIEW: 'question_review'
 }

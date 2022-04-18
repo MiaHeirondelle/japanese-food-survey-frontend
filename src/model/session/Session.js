@@ -1,3 +1,5 @@
+import User from "../user/User";
+
 class Session {
   constructor(
     currentRespondents,
@@ -36,9 +38,9 @@ class Session {
 
   static fromJson(sessionJson) {
     return new Session(
-      sessionJson.joined_users,
-      sessionJson.awaiting_users,
-      sessionJson.admin,
+      (sessionJson.joined_users || []).map(User.fromJson),
+      (sessionJson.awaiting_users || []).map(User.fromJson),
+      sessionJson.admin ? User.fromJson(sessionJson.admin) : sessionJson.admin,
       sessionJson.status,
       sessionJson.current_element_number,
       sessionJson.template
