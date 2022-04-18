@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import BasicAnswer from "./BasicAnswer";
 import QuestionTimer from "./QuestionTimer";
+import BasicQuestionAnswerModel from "../../model/question/BasicQuestionAnswerModel";
 
 class BasicQuestionReview extends Component {
   // Expects 'pageNumber', 'elementNumber', 'user', 'respondents', 'question', 'answers'
@@ -15,6 +16,10 @@ class BasicQuestionReview extends Component {
     if (userAnswerIndex >= 0) {
       otherAnswers.splice(userAnswerIndex, 1);
     }
+    const missingAnswers = this.props.respondents
+      .filter((r) => this.props.answers.findIndex((a) => a.respondentId === r.id) < 0)
+      .map((r) => new BasicQuestionAnswerModel(this.props.question.id, r.id, null, null));
+    otherAnswers.push(...missingAnswers);
 
     otherAnswers
       .sort((a1, a2) => {

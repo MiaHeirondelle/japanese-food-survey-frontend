@@ -25,7 +25,7 @@ const SessionCheckState = {
 };
 
 class SessionCheck extends Component {
-  // Expects 'user', 'session', 'stateTransitionCb'.
+  // Expects 'user', 'session', 'stateTransitionStaticCb'.
   constructor(props) {
     super(props);
     this.state = {

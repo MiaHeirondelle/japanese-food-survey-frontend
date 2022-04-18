@@ -8,7 +8,7 @@ import * as client from "../client/client"
 
 
 class Login extends Component {
-  // Expects `stateTransitionCb` function.
+  // Expects `stateTransitionStaticCb` function.
   constructor(props) {
     super(props);
     this.state = {
