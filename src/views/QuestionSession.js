@@ -14,6 +14,7 @@ import BasicQuestionReview from "../component/question_session/BasicQuestionRevi
 import RepeatedQuestion from "../component/question_session/RepeatedQuestion";
 import Row from "react-bootstrap/Row";
 import QuestionTimer from "../component/question_session/QuestionTimer";
+import RepeatedQuestionReview from "../component/question_session/RepeatedQuestionReview";
 
 class QuestionSession extends Component {
 
@@ -44,6 +45,16 @@ class QuestionSession extends Component {
         case 'basic_question_review_selected':
           self.setState((previousState) => {
             return {...previousState, element: message.element, answers: message.answers};
+          });
+          break;
+        case 'repeated_question_review_selected':
+          self.setState((previousState) => {
+            return {
+              ...previousState,
+              element: message.element,
+              answers: message.answers,
+              previousAnswers: message.previous_answers
+            };
           });
           break;
         case 'user_joined':
@@ -160,14 +171,27 @@ class QuestionSession extends Component {
           const reviewQuestion = element.question;
           switch (reviewQuestion.type) {
             case QuestionType.BASIC:
-              const questionModel = QuestionModel.fromJson(reviewQuestion);
-              const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
+              const basicQuestionModel = QuestionModel.fromJson(reviewQuestion);
+              const basicQuestionAnswers = this.state.answers.map(QuestionAnswerModel.fromJson);
               return this.renderWithTopbar(
                 <Col className='StretchContent'>
                   <BasicQuestionReview user={this.props.user}
                                        respondents={this.state.session.currentRespondents}
-                                       question={questionModel}
-                                       answers={answers}/>
+                                       question={basicQuestionModel}
+                                       answers={basicQuestionAnswers}/>
+                </Col>
+              );
+            case QuestionType.REPEATED:
+              const repeatedQuestionModel = QuestionModel.fromJson(reviewQuestion);
+              const repeatedQuestionAnswers = this.state.answers.map(QuestionAnswerModel.fromJson);
+              const previousAnswers = this.state.previousAnswers.map(QuestionAnswerModel.fromJson)
+              return this.renderWithTopbar(
+                <Col className='StretchContent'>
+                  <RepeatedQuestionReview user={this.props.user}
+                                          respondents={this.state.session.currentRespondents}
+                                          question={repeatedQuestionModel}
+                                          answers={repeatedQuestionAnswers}
+                                          previousAnswers={previousAnswers}/>
                 </Col>
               );
 
