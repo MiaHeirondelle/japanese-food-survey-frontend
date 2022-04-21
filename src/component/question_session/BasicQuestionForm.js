@@ -51,7 +51,7 @@ class BasicQuestionForm extends Component {
         </Row>
         <Row className='mt-5 StretchContainer'>
           <Col className='col-lg-12'>
-            <Row><h4>質問2</h4></Row>
+            <Row><h4>質問２</h4></Row>
             <Row>
               <Col className='col-lg-6'>
                 <span className='ImportantText'>その理由を教えてください</span>

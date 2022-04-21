@@ -1,13 +1,13 @@
 import React, {Component} from "react";
 import {QuestionType} from "../model/session/QuestionType";
-import BasicQuestionModel from "../model/question/BasicQuestionModel";
+import QuestionModel from "../model/question/QuestionModel";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import {ElementType} from "../model/session/ElementType";
 import User from "../model/user/User";
 import {displayInfoPopup} from "../util/PopupUtil";
-import BasicQuestionAnswerModel from "../model/question/BasicQuestionAnswerModel";
+import QuestionAnswerModel from "../model/question/QuestionAnswerModel";
 import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
 
 class AdminQuestionSession extends Component {
@@ -26,7 +26,8 @@ class AdminQuestionSession extends Component {
     this.props.socket.onmessage = async function (event) {
       const message = JSON.parse(event.data);
       switch (message.type) {
-        case 'question_selected':
+        case 'basic_question_selected':
+        case 'repeated_question_selected':
           self.setState((previousState) => {
             return {...previousState, element: message.element}
           });
@@ -75,8 +76,8 @@ class AdminQuestionSession extends Component {
           const reviewQuestion = element.question;
           switch (reviewQuestion.type) {
             case QuestionType.BASIC:
-              const questionModel = BasicQuestionModel.fromJson(reviewQuestion);
-              const answers = this.state.answers.map(BasicQuestionAnswerModel.fromJson);
+              const questionModel = QuestionModel.fromJson(reviewQuestion);
+              const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
               return (
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>

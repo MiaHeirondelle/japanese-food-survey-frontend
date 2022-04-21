@@ -1,3 +1,4 @@
 export const QuestionType = {
-  BASIC: 'basic'
+  BASIC: 'basic',
+  REPEATED: 'repeated'
 }

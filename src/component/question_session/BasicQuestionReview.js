@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import BasicAnswer from "./BasicAnswer";
 import QuestionTimer from "./QuestionTimer";
-import BasicQuestionAnswerModel from "../../model/question/BasicQuestionAnswerModel";
+import QuestionAnswerModel from "../../model/question/QuestionAnswerModel";
 
 class BasicQuestionReview extends Component {
   // Expects 'pageNumber', 'elementNumber', 'user', 'respondents', 'question', 'answers'
@@ -18,7 +18,7 @@ class BasicQuestionReview extends Component {
     }
     const missingAnswers = this.props.respondents
       .filter((r) => this.props.answers.findIndex((a) => a.respondentId === r.id) < 0)
-      .map((r) => new BasicQuestionAnswerModel(this.props.question.id, r.id, null, null));
+      .map((r) => new QuestionAnswerModel(this.props.question.id, r.id, null, null));
     otherAnswers.push(...missingAnswers);
 
     otherAnswers
