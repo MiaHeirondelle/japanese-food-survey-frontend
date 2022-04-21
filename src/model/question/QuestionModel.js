@@ -1,4 +1,4 @@
-class BasicQuestionModel {
+class QuestionModel {
 
   constructor(
     id,
@@ -12,7 +12,7 @@ class BasicQuestionModel {
   }
 
   static fromJson(basicQuestionJson) {
-    return new BasicQuestionModel(
+    return new QuestionModel(
       basicQuestionJson.id,
       basicQuestionJson.text,
       basicQuestionJson.scale_text.min_bound_caption,
@@ -21,4 +21,4 @@ class BasicQuestionModel {
   }
 }
 
-export default BasicQuestionModel;
+export default QuestionModel;

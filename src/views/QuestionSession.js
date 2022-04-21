@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {QuestionType} from "../model/session/QuestionType";
 import BasicQuestion from "../component/question_session/BasicQuestion";
-import BasicQuestionModel from "../model/question/BasicQuestionModel";
+import QuestionModel from "../model/question/QuestionModel";
 import {extractFormData} from "../util/FormUtil";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
@@ -9,8 +9,9 @@ import {ElementType} from "../model/session/ElementType";
 import User from "../model/user/User";
 import {displayInfoPopup} from "../util/PopupUtil";
 import * as websocketClient from "../client/websocket";
-import BasicQuestionAnswerModel from "../model/question/BasicQuestionAnswerModel";
+import QuestionAnswerModel from "../model/question/QuestionAnswerModel";
 import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
+import RepeatedQuestion from "../component/question_session/RepeatedQuestion";
 
 class QuestionSession extends Component {
 
@@ -28,9 +29,14 @@ class QuestionSession extends Component {
     this.props.socket.onmessage = async function (event) {
       const message = JSON.parse(event.data);
       switch (message.type) {
-        case 'question_selected':
+        case 'basic_question_selected':
           self.setState((previousState) => {
             return {...previousState, element: message.element}
+          });
+          break;
+        case 'repeated_question_selected':
+          self.setState((previousState) => {
+            return {...previousState, element: message.element, answers: message.previous_answers}
           });
           break;
         case 'basic_question_review_selected':
@@ -97,11 +103,23 @@ class QuestionSession extends Component {
           const selectedQuestion = element.question;
           switch (selectedQuestion.type) {
             case QuestionType.BASIC:
-              const questionModel = BasicQuestionModel.fromJson(selectedQuestion);
+              const basicQuestionModel = QuestionModel.fromJson(selectedQuestion);
               return (
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>
-                  <BasicQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} question={questionModel}
+                  <BasicQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} question={basicQuestionModel}
+                                 onSubmit={this.onSubmit.bind(this)}/>
+                  <ScreenCutoffBar/>
+                </Col>
+              );
+            case QuestionType.REPEATED:
+              const repeatedQuestionModel = QuestionModel.fromJson(selectedQuestion);
+              const previousQuestionModel = QuestionModel.fromJson(element.previous_question);
+              const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
+              return (
+                <Col className='FullHeightContent StretchContent'>
+                  <ScreenCutoffBar/>
+                  <RepeatedQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} user={this.props.user} question={repeatedQuestionModel} previousQuestion={previousQuestionModel} previousAnswers={answers}
                                  onSubmit={this.onSubmit.bind(this)}/>
                   <ScreenCutoffBar/>
                 </Col>
@@ -115,8 +133,8 @@ class QuestionSession extends Component {
           const reviewQuestion = element.question;
           switch (reviewQuestion.type) {
             case QuestionType.BASIC:
-              const questionModel = BasicQuestionModel.fromJson(reviewQuestion);
-              const answers = this.state.answers.map(BasicQuestionAnswerModel.fromJson);
+              const questionModel = QuestionModel.fromJson(reviewQuestion);
+              const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
               return (
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>

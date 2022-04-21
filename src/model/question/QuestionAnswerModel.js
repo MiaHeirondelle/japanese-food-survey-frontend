@@ -1,4 +1,4 @@
-class BasicQuestionAnswerModel {
+class QuestionAnswerModel {
   constructor(
     questionId,
     respondentId,
@@ -11,7 +11,7 @@ class BasicQuestionAnswerModel {
   }
 
   static fromJson(basicAnswerJson) {
-    return new BasicQuestionAnswerModel(
+    return new QuestionAnswerModel(
       basicAnswerJson.question_id,
       basicAnswerJson.respondent_id,
       basicAnswerJson.value,
@@ -20,4 +20,4 @@ class BasicQuestionAnswerModel {
   }
 }
 
-export default BasicQuestionAnswerModel;
+export default QuestionAnswerModel;
