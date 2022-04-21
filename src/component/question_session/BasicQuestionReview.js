@@ -3,32 +3,14 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import BasicAnswer from "./BasicAnswer";
-import QuestionAnswerModel from "../../model/question/QuestionAnswerModel";
+import {createAnswersList} from "../../util/AnswerUtil";
 
 class BasicQuestionReview extends Component {
   // Expects 'user', 'respondents', 'question', 'answers'
   constructor(props) {
     super(props);
-    const userAnswerIndex = this.props.answers.findIndex(a => a.respondentId === this.props.user.id);
-    const userAnswer = userAnswerIndex >= 0 ? [this.props.answers[userAnswerIndex]] : [];
-    const otherAnswers = this.props.answers.slice();
-    if (userAnswerIndex >= 0) {
-      otherAnswers.splice(userAnswerIndex, 1);
-    }
-    const missingAnswers = this.props.respondents
-      .filter((r) => this.props.answers.findIndex((a) => a.respondentId === r.id) < 0)
-      .map((r) => new QuestionAnswerModel(this.props.question.id, r.id, null, null));
-    otherAnswers.push(...missingAnswers);
-
-    otherAnswers
-      .sort((a1, a2) => {
-        const u1Name = (this.props.respondents.find((r) => r.id === a1.respondentId) || {name: 'undefined'}).name;
-        const u2Name = (this.props.respondents.find((r) => r.id === a2.respondentId) || {name: 'undefined'}).name;
-        return u1Name.localeCompare(u2Name);
-      });
-
     this.state = {
-      answers: userAnswer.concat(otherAnswers)
+      answers: createAnswersList(this.props.user, this.props.respondents, this.props.question, this.props.answers)
     }
   }
 
