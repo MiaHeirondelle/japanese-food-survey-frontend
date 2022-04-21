@@ -65,7 +65,7 @@ class QuestionSession extends Component {
             const form = self.elementRef.current.getForm();
             await self.submitFormData(form);
           } else {
-            websocketClient.sendReadyForNextElement(self.state.socket);
+            websocketClient.sendReadyToProceed(self.state.socket);
           }
           break;
 
@@ -76,7 +76,7 @@ class QuestionSession extends Component {
   }
 
   async componentDidMount() {
-    websocketClient.sendReadyForNextElement(this.state.socket);
+    websocketClient.sendReadyToProceed(this.state.socket);
   }
 
   async onSubmit(formEvent) {
@@ -86,12 +86,26 @@ class QuestionSession extends Component {
     await this.submitFormData(form)
   }
 
+  async onChange(formEvent) {
+    const form = formEvent.target.form;
+    if (form) {
+      await this.submitTemporaryFormData(form)
+    }
+  }
+
   async submitFormData(form) {
     if (form.checkValidity() === true) {
       const formValues = extractFormData(form);
       await websocketClient.provideQuestionAnswer(this.state.socket, this.state.element.question.id, formValues.likertValue, formValues.userComment);
       form.reset();
       window.scrollTo(0, 0);
+    }
+  }
+
+  async submitTemporaryFormData(form) {
+    if (form.checkValidity() === true) {
+      const formValues = extractFormData(form);
+      await websocketClient.provideIntermediateQuestionAnswer(this.state.socket, this.state.element.question.id, formValues.likertValue, formValues.userComment);
     }
   }
 
@@ -108,7 +122,8 @@ class QuestionSession extends Component {
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>
                   <BasicQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} question={basicQuestionModel}
-                                 onSubmit={this.onSubmit.bind(this)}/>
+                                 onSubmit={this.onSubmit.bind(this)}
+                                 onChange={this.onChange.bind(this)}/>
                   <ScreenCutoffBar/>
                 </Col>
               );
@@ -120,7 +135,8 @@ class QuestionSession extends Component {
                 <Col className='FullHeightContent StretchContent'>
                   <ScreenCutoffBar/>
                   <RepeatedQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} user={this.props.user} question={repeatedQuestionModel} previousQuestion={previousQuestionModel} previousAnswers={answers}
-                                 onSubmit={this.onSubmit.bind(this)}/>
+                                 onSubmit={this.onSubmit.bind(this)}
+                                 onChange={this.onChange.bind(this)}/>
                   <ScreenCutoffBar/>
                 </Col>
               );

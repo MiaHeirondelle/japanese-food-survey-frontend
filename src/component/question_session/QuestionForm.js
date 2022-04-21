@@ -4,17 +4,34 @@ import Button from "react-bootstrap/Button";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-class BasicQuestionForm extends Component {
+class QuestionForm extends Component {
 
   constructor(props) {
     super(props);
     this.formRef = React.createRef();
+    this.state = {
+      timeoutId: undefined
+    }
   }
 
-  // Expects question, formId, disabled, onSubmit function
+  onChange(formEvent) {
+    if (this.state.timeoutId) {
+      clearTimeout(this.state.timeoutId);
+      this.state.timeoutId = undefined;
+    }
+    this.setState({timeoutId: setTimeout(() => this.props.onChange(formEvent), 1000)});
+  }
+
+  componentWillUnmount() {
+    if (this.state.timeoutId) {
+      clearTimeout(this.state.timeoutId);
+    }
+  }
+
+  // Expects question, formId, disabled, onSubmit function, onChange function
   render() {
     return (
-      <Form className='StretchContent' id={this.props.formId} ref={this.formRef} onSubmit={this.props.onSubmit}>
+      <Form className='StretchContent' id={this.props.formId} ref={this.formRef} onSubmit={this.props.onSubmit} onChange={this.onChange.bind(this)}>
         <Row className='StretchContainer'>
           <Col className='col-lg-12'>
             <Row><h4>質問１</h4></Row>
@@ -73,4 +90,4 @@ class BasicQuestionForm extends Component {
   }
 }
 
-export default BasicQuestionForm;
+export default QuestionForm;

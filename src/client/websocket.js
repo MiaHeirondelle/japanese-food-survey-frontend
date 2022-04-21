@@ -11,9 +11,9 @@ export function sendBeginSession(socket) {
   sendMessage(socket, JSON.stringify(json));
 }
 
-export function sendReadyForNextElement(socket) {
+export function sendReadyToProceed(socket) {
   const json = {
-    'type': 'ready_for_next_element'
+    'type': 'ready_to_proceed'
   }
   sendMessage(socket, JSON.stringify(json));
 }
@@ -21,6 +21,16 @@ export function sendReadyForNextElement(socket) {
 export function provideQuestionAnswer(socket, questionId, scaleValue, comment) {
   const json = {
     'type': 'provide_answer',
+    'question_id': questionId,
+    'scale_value': scaleValue,
+    'comment': comment
+  }
+  sendMessage(socket, JSON.stringify(json));
+}
+
+export function provideIntermediateQuestionAnswer(socket, questionId, scaleValue, comment) {
+  const json = {
+    'type': 'provide_intermediate_answer',
     'question_id': questionId,
     'scale_value': scaleValue,
     'comment': comment
