@@ -7,7 +7,7 @@ class NoSession extends Component {
     return (
       <Row>
         <Col>
-          <b>No session is currently in progress.</b>
+          <b>セッションはありません</b>
         </Col>
       </Row>
     );

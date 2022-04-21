@@ -16,7 +16,7 @@ class JoinSession extends Component {
     return (
       <Row>
         <Col>
-          <Button variant='primary' onClick={this.onClick.bind(this)}>Join session</Button>
+          <Button variant='primary' onClick={this.onClick.bind(this)}>セッションに参加</Button>
         </Col>
       </Row>
     );

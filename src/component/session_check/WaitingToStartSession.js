@@ -15,11 +15,10 @@ class WaitingToStartSession extends Component {
     return (
       <Row>
         <Col>
-          <b>Waiting for session to start.</b>
+          <b>ユーザーの参加を待っています</b>
           <br/>
           <Button hidden={!this.isAdminComponent()} disabled={!this.isReadyToStart()} variant='primary'
-                  onClick={this.onBegin.bind(this)}>Begin
-            session</Button>
+                  onClick={this.onBegin.bind(this)}>始める</Button>
         </Col>
       </Row>
     );

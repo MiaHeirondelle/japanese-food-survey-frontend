@@ -100,7 +100,7 @@ class SessionCheck extends Component {
     await this.updateFromSession(session);
     const websocket = this.getOrCreateSessionWebsocket();
     this.setState((previousState) => {
-      return { ...previousState, socket: websocket };
+      return {...previousState, socket: websocket};
     });
   }
 
@@ -119,7 +119,7 @@ class SessionCheck extends Component {
 
   setWebSocketCallbacks(socket) {
     const self = this;
-    socket.onmessage = async function(event) {
+    socket.onmessage = async function (event) {
       const message = JSON.parse(event.data);
       switch (message.type) {
         case 'user_joined':
@@ -127,12 +127,12 @@ class SessionCheck extends Component {
           const user = User.fromJson(message.user);
           await self.updateFromSession(userJoinedSession);
           if (user.id !== self.props.user.id) {
-            displayInfoPopup(`User [${user.name}] joined!`)
+            displayInfoPopup(`ユーザー[${user.name}]がジョインされました`)
           }
           break;
         case 'session_began':
           const beganSession = Session.fromJson(message.session);
-          socket.onmessage = function(event) {
+          socket.onmessage = function (event) {
             const message = JSON.parse(event.data);
             console.log('Skipping socket message', message);
           }
@@ -142,10 +142,10 @@ class SessionCheck extends Component {
           console.error('Unknown message type', message);
       }
     }
-    socket.onerror = function(event) {
+    socket.onerror = function (event) {
       console.error('error', event);
     }
-    socket.onclose = function(event) {
+    socket.onclose = function (event) {
       console.log('disconnected', event)
     }
   }

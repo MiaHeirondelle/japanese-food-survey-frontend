@@ -12,16 +12,21 @@ class CreateSession extends Component {
     this.respondentOptions = this.props.respondents.map(u => {
       return {id: u.id, name: u.name}
     });
+    this.state = {
+      selectedRespondents: []
+    }
     this.selectedRespondents = [];
   }
 
   async onClick() {
-    const session = await client.createSession(this.selectedRespondents.map(u => u.id));
+    const session = await client.createSession(this.state.selectedRespondents.map(u => u.id));
     this.props.onCreateCb(session);
   }
 
   onSelectedUsersChange(users) {
-    this.selectedRespondents = users;
+    this.setState({
+      selectedRespondents: users
+    });
   }
 
   render() {
@@ -29,8 +34,9 @@ class CreateSession extends Component {
       <Row>
         <Col>
           <MultiSelector options={this.respondentOptions} name="respondentSelector"
-                         onSelectCb={this.onSelectedUsersChange.bind(this)}/>
-          <Button variant='primary' onClick={this.onClick.bind(this)}>Create session</Button>
+                         onChangeCb={this.onSelectedUsersChange.bind(this)}/>
+          <Button disabled={this.state.selectedRespondents.length === 0} variant='primary'
+                  onClick={this.onClick.bind(this)}>セッションを作成</Button>
         </Col>
       </Row>
     );
