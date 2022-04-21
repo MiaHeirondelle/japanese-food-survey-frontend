@@ -3,10 +3,10 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import QuestionTimer from "./QuestionTimer";
-import BasicQuestionForm from "./BasicQuestionForm";
+import QuestionForm from "./QuestionForm";
 
 class RepeatedQuestion extends Component {
-  // Expects onSubmit, pageNumber, elementNumber, question, previousQuestion, respondents, previousAnswers
+  // Expects pageNumber, elementNumber, question, previousQuestion, respondents, previousAnswers, onSubmit, onChange
   constructor(props) {
     super(props);
     this.formRef = React.createRef();
@@ -16,9 +16,7 @@ class RepeatedQuestion extends Component {
   }
 
   render() {
-    console.log(this.props.previousAnswers);
     const previousAnswer = (this.props.previousAnswers.find((a) => a.respondentId === this.props.user.id) || { value: 'empty' }).value
-    console.log(previousAnswer);
     return <Row className='StretchContainer mt-lg-3 mx-lg-4'>
       <Row>
         <Col className='col-lg-10 '>
@@ -58,9 +56,10 @@ class RepeatedQuestion extends Component {
           {previousAnswer}
         </Col>
       </Row>
-      <BasicQuestionForm ref={this.formRef} formId={`form-${this.props.question.id}`}
-                         question={this.props.question}
-                         onSubmit={this.props.onSubmit}/>
+      <QuestionForm ref={this.formRef} formId={`form-${this.props.question.id}`}
+                    question={this.props.question}
+                    onSubmit={this.props.onSubmit}
+                    onChange={this.props.onChange}/>
     </Row>
   }
 

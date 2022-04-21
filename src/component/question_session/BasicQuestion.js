@@ -3,10 +3,10 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import QuestionTimer from "./QuestionTimer";
-import BasicQuestionForm from "./BasicQuestionForm";
+import QuestionForm from "./QuestionForm";
 
 class BasicQuestion extends Component {
-  // Expects 'onSubmit, 'pageNumber', 'elementNumber', 'question'
+  // Expects pageNumber', 'elementNumber', 'question, onSubmit, onChange
   constructor(props) {
     super(props);
     this.formRef = React.createRef();
@@ -35,9 +35,12 @@ class BasicQuestion extends Component {
           それではどうぞ！
         </Col>
       </Row>
-      <BasicQuestionForm ref={this.formRef} formId={`form-${this.props.question.id}`}
-                         question={this.props.question}
-                         onSubmit={this.props.onSubmit}/>
+      <QuestionForm ref={this.formRef}
+                    formId={`form-${this.props.question.id}`}
+                    question={this.props.question}
+                    onSubmit={this.props.onSubmit}
+                    onChange={this.props.onChange}
+      />
     </Row>
   }
 
