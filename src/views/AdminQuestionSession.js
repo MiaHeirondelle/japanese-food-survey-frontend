@@ -9,6 +9,8 @@ import User from "../model/user/User";
 import {displayInfoPopup} from "../util/PopupUtil";
 import QuestionAnswerModel from "../model/question/QuestionAnswerModel";
 import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
+import QuestionTimer from "../component/question_session/QuestionTimer";
+import * as websocketClient from "../client/websocket";
 
 class AdminQuestionSession extends Component {
 
@@ -16,10 +18,10 @@ class AdminQuestionSession extends Component {
   // State: session, socket, element
   constructor(props) {
     super(props);
-    this.elementRef = React.createRef();
     this.state = {
       session: this.props.session,
       socket: this.props.socket,
+      currentTimeS: 0,
       element: undefined
     }
     const self = this;
@@ -48,11 +50,9 @@ class AdminQuestionSession extends Component {
           self.props.sessionFinishedCb();
           break;
         case 'timer_tick':
-          if (self.elementRef.current && self.elementRef.current.setTime) {
-            self.elementRef.current.setTime(message.time_left_in_ms / 1000);
-          }
-          break;
-        case 'transition_to_next_element':
+          self.setState((previousState) => {
+            return {...previousState, currentTimeS: message.time_left_in_ms / 1000};
+          });
           break;
 
         default:
@@ -61,16 +61,46 @@ class AdminQuestionSession extends Component {
     }
   }
 
+  renderWithTopbar(component) {
+    const elementNumber = this.state.element ? this.state.element.number : 0;
+    const elementLimit = this.state.session.template.elements.length;
+    return (
+      <Col className='FullHeightContent StretchContent'>
+        <ScreenCutoffBar/>
+        <Row className='mt-lg-3 mx-lg-4'>
+          <Col className='col-lg-10'>
+            <h4>Element {elementNumber} out of {elementLimit}</h4>
+          </Col>
+          <Col className='col-lg-2'>
+            <QuestionTimer currentTimeS={this.state.currentTimeS}/>
+          </Col>
+        </Row>
+        <br/>
+        {component}
+        <ScreenCutoffBar/>
+      </Col>
+    );
+  }
+
+  async componentDidMount() {
+    websocketClient.sendReadyToProceed(this.state.socket);
+  }
+
   render() {
     const element = this.state.element;
     if (element !== undefined) {
       switch (element.type) {
         case ElementType.QUESTION:
-          return <Row className='FullHeightContent align-items-center text-center align-middle'>
-            <Col>
-              Waiting for users to respond to questions.
+          return this.renderWithTopbar(
+            <Col className='StretchContent'>
+              <Row className='StretchContainer align-middle align-items-center text-center '>
+                <Col>
+                  Waiting for users to respond to questions.
+                </Col>
+              </Row>
+              <Row className='StretchContent'/>
             </Col>
-          </Row>;
+          );
 
         case ElementType.QUESTION_REVIEW:
           const reviewQuestion = element.question;
@@ -78,11 +108,12 @@ class AdminQuestionSession extends Component {
             case QuestionType.BASIC:
               const questionModel = QuestionModel.fromJson(reviewQuestion);
               const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
-              return (
-                <Col className='FullHeightContent StretchContent'>
-                  <ScreenCutoffBar/>
-                  <BasicQuestionReview ref={this.elementRef} pageNumber={0} elementNumber={element.number} user={this.props.user} respondents={this.state.session.currentRespondents} question={questionModel} answers={answers}/>
-                  <ScreenCutoffBar/>
+              return this.renderWithTopbar(
+                <Col className='StretchContent'>
+                  <BasicQuestionReview user={this.props.user}
+                                       respondents={this.state.session.currentRespondents}
+                                       question={questionModel}
+                                       answers={answers}/>
                 </Col>
               );
 

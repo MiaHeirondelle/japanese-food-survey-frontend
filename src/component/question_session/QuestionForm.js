@@ -6,9 +6,9 @@ import Col from 'react-bootstrap/Col';
 
 class QuestionForm extends Component {
 
+  // Expects question, formId, disabled, onSubmit function, onChange function
   constructor(props) {
     super(props);
-    this.formRef = React.createRef();
     this.state = {
       timeoutId: undefined
     }
@@ -28,10 +28,10 @@ class QuestionForm extends Component {
     }
   }
 
-  // Expects question, formId, disabled, onSubmit function, onChange function
   render() {
     return (
-      <Form className='StretchContent' id={this.props.formId} ref={this.formRef} onSubmit={this.props.onSubmit} onChange={this.onChange.bind(this)}>
+      <Form className='StretchContent' id={this.props.formId} onSubmit={this.props.onSubmit}
+            onChange={this.onChange.bind(this)}>
         <Row className='StretchContainer'>
           <Col className='col-lg-12'>
             <Row><h4>質問１</h4></Row>
@@ -83,10 +83,6 @@ class QuestionForm extends Component {
         <Button className='mb-xl-5 w-100' type='submit' disabled={this.props.disabled}>Submit</Button>
       </Form>
     )
-  }
-
-  getForm() {
-    return this.formRef.current;
   }
 }
 
