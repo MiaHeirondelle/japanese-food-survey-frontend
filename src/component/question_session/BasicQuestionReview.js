@@ -3,11 +3,10 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 import BasicAnswer from "./BasicAnswer";
-import QuestionTimer from "./QuestionTimer";
 import QuestionAnswerModel from "../../model/question/QuestionAnswerModel";
 
 class BasicQuestionReview extends Component {
-  // Expects 'pageNumber', 'elementNumber', 'user', 'respondents', 'question', 'answers'
+  // Expects 'user', 'respondents', 'question', 'answers'
   constructor(props) {
     super(props);
     const userAnswerIndex = this.props.answers.findIndex(a => a.respondentId === this.props.user.id);
@@ -29,21 +28,12 @@ class BasicQuestionReview extends Component {
       });
 
     this.state = {
-      currentTimeS: 0,
       answers: userAnswer.concat(otherAnswers)
     }
   }
 
   render() {
     return <Row className='StretchContainer mt-lg-3 mx-lg-4'>
-      <Row>
-        <Col className='col-lg-10'>
-          <h4>{this.props.pageNumber}練習:質問{this.props.elementNumber}・{this.props.elementNumber + 1}の回答</h4>
-        </Col>
-        <Col className='col-lg-2'>
-          <QuestionTimer currentTimeS={this.state.currentTimeS}/>
-        </Col>
-      </Row>
       <Row className='ImportantText'>
         {this.props.question.text}
       </Row>
@@ -77,12 +67,6 @@ class BasicQuestionReview extends Component {
       </Table>
       <Row className='StretchContent'/>
     </Row>
-  }
-
-  setTime(timeS) {
-    this.setState((previousState) => {
-      return {...previousState, currentTimeS: timeS}
-    });
   }
 }
 

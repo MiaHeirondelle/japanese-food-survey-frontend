@@ -12,6 +12,8 @@ import * as websocketClient from "../client/websocket";
 import QuestionAnswerModel from "../model/question/QuestionAnswerModel";
 import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
 import RepeatedQuestion from "../component/question_session/RepeatedQuestion";
+import Row from "react-bootstrap/Row";
+import QuestionTimer from "../component/question_session/QuestionTimer";
 
 class QuestionSession extends Component {
 
@@ -19,10 +21,10 @@ class QuestionSession extends Component {
   // State: session, socket, element
   constructor(props) {
     super(props);
-    this.elementRef = React.createRef();
     this.state = {
       session: this.props.session,
       socket: this.props.socket,
+      currentTimeS: 0,
       element: undefined
     }
     const self = this;
@@ -31,23 +33,23 @@ class QuestionSession extends Component {
       switch (message.type) {
         case 'basic_question_selected':
           self.setState((previousState) => {
-            return {...previousState, element: message.element}
+            return {...previousState, element: message.element};
           });
           break;
         case 'repeated_question_selected':
           self.setState((previousState) => {
-            return {...previousState, element: message.element, answers: message.previous_answers}
+            return {...previousState, element: message.element, answers: message.previous_answers};
           });
           break;
         case 'basic_question_review_selected':
           self.setState((previousState) => {
-            return {...previousState, element: message.element, answers: message.answers}
+            return {...previousState, element: message.element, answers: message.answers};
           });
           break;
         case 'user_joined':
           const user = User.fromJson(message.user);
           if (user.id !== self.props.user.id) {
-            displayInfoPopup(`User [${user.name}] joined!`)
+            displayInfoPopup(`User [${user.name}] joined!`);
           }
           break;
         case 'session_finished':
@@ -55,20 +57,10 @@ class QuestionSession extends Component {
           self.props.sessionFinishedCb();
           break;
         case 'timer_tick':
-          if (self.elementRef.current && self.elementRef.current.setTime) {
-            self.elementRef.current.setTime(message.time_left_in_ms / 1000);
-          }
+          self.setState((previousState) => {
+            return {...previousState, currentTimeS: message.time_left_in_ms / 1000};
+          });
           break;
-        case 'transition_to_next_element':
-          if (self.elementRef.current && self.elementRef.current.getForm) {
-            self.elementRef.current.setTime(0);
-            const form = self.elementRef.current.getForm();
-            await self.submitFormData(form);
-          } else {
-            websocketClient.sendReadyToProceed(self.state.socket);
-          }
-          break;
-
         default:
           console.error('Unknown message type', message);
       }
@@ -109,6 +101,27 @@ class QuestionSession extends Component {
     }
   }
 
+  renderWithTopbar(component) {
+    const elementNumber = this.state.element ? this.state.element.number : 0;
+    const elementLimit = this.state.session.template.elements.length;
+    return (
+      <Col className='FullHeightContent StretchContent'>
+        <ScreenCutoffBar/>
+        <Row className='mt-lg-3 mx-lg-4'>
+          <Col className='col-lg-10'>
+            <h4>Element {elementNumber} out of {elementLimit}</h4>
+          </Col>
+          <Col className='col-lg-2'>
+            <QuestionTimer currentTimeS={this.state.currentTimeS}/>
+          </Col>
+        </Row>
+        <br/>
+        {component}
+        <ScreenCutoffBar/>
+      </Col>
+    );
+  }
+
   render() {
     const element = this.state.element;
     if (element !== undefined) {
@@ -118,26 +131,24 @@ class QuestionSession extends Component {
           switch (selectedQuestion.type) {
             case QuestionType.BASIC:
               const basicQuestionModel = QuestionModel.fromJson(selectedQuestion);
-              return (
-                <Col className='FullHeightContent StretchContent'>
-                  <ScreenCutoffBar/>
-                  <BasicQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} question={basicQuestionModel}
+              return this.renderWithTopbar(
+                <Col className='StretchContent'>
+                  <BasicQuestion question={basicQuestionModel}
                                  onSubmit={this.onSubmit.bind(this)}
                                  onChange={this.onChange.bind(this)}/>
-                  <ScreenCutoffBar/>
                 </Col>
               );
             case QuestionType.REPEATED:
               const repeatedQuestionModel = QuestionModel.fromJson(selectedQuestion);
               const previousQuestionModel = QuestionModel.fromJson(element.previous_question);
               const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
-              return (
-                <Col className='FullHeightContent StretchContent'>
-                  <ScreenCutoffBar/>
-                  <RepeatedQuestion ref={this.elementRef}  pageNumber={0} elementNumber={element.number} user={this.props.user} question={repeatedQuestionModel} previousQuestion={previousQuestionModel} previousAnswers={answers}
-                                 onSubmit={this.onSubmit.bind(this)}
-                                 onChange={this.onChange.bind(this)}/>
-                  <ScreenCutoffBar/>
+              return this.renderWithTopbar(
+                <Col className='StretchContent'>
+                  <RepeatedQuestion user={this.props.user}
+                                    question={repeatedQuestionModel}
+                                    previousQuestion={previousQuestionModel} previousAnswers={answers}
+                                    onSubmit={this.onSubmit.bind(this)}
+                                    onChange={this.onChange.bind(this)}/>
                 </Col>
               );
 
@@ -151,11 +162,12 @@ class QuestionSession extends Component {
             case QuestionType.BASIC:
               const questionModel = QuestionModel.fromJson(reviewQuestion);
               const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
-              return (
-                <Col className='FullHeightContent StretchContent'>
-                  <ScreenCutoffBar/>
-                  <BasicQuestionReview ref={this.elementRef} pageNumber={0} elementNumber={element.number} user={this.props.user} respondents={this.state.session.currentRespondents} question={questionModel} answers={answers}/>
-                  <ScreenCutoffBar/>
+              return this.renderWithTopbar(
+                <Col className='StretchContent'>
+                  <BasicQuestionReview user={this.props.user}
+                                       respondents={this.state.session.currentRespondents}
+                                       question={questionModel}
+                                       answers={answers}/>
                 </Col>
               );
 

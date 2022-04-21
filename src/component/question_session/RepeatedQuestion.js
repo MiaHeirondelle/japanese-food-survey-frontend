@@ -2,31 +2,14 @@ import React, {Component} from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import QuestionTimer from "./QuestionTimer";
 import QuestionForm from "./QuestionForm";
 
 class RepeatedQuestion extends Component {
   // Expects pageNumber, elementNumber, question, previousQuestion, respondents, previousAnswers, onSubmit, onChange
-  constructor(props) {
-    super(props);
-    this.formRef = React.createRef();
-    this.state = {
-      currentTimeS: 0
-    }
-  }
 
   render() {
-    const previousAnswer = (this.props.previousAnswers.find((a) => a.respondentId === this.props.user.id) || { value: 'empty' }).value
+    const previousAnswer = (this.props.previousAnswers.find((a) => a.respondentId === this.props.user.id) || {value: 'empty'}).value
     return <Row className='StretchContainer mt-lg-3 mx-lg-4'>
-      <Row>
-        <Col className='col-lg-10 '>
-          <h4>{this.props.pageNumber}練習:質問{this.props.elementNumber}・{this.props.elementNumber + 1}の回答</h4>
-        </Col>
-        <Col className='col-lg-2'>
-          <QuestionTimer currentTimeS={this.state.currentTimeS}/>
-        </Col>
-      </Row>
-      <br/>
       <Row>
         <Col className='col-lg-6 ImportantText'>
           以下の質問に対して回答していただきます<br/>
@@ -56,19 +39,11 @@ class RepeatedQuestion extends Component {
           {previousAnswer}
         </Col>
       </Row>
-      <QuestionForm ref={this.formRef} formId={`form-${this.props.question.id}`}
+      <QuestionForm formId={`form-${this.props.question.id}`}
                     question={this.props.question}
                     onSubmit={this.props.onSubmit}
                     onChange={this.props.onChange}/>
     </Row>
-  }
-
-  setTime(timeS) {
-    this.setState({currentTimeS: timeS});
-  }
-
-  getForm() {
-    return this.formRef.current.getForm();
   }
 }
 
