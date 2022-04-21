@@ -42,7 +42,7 @@ class AdminQuestionSession extends Component {
         case 'user_joined':
           const user = User.fromJson(message.user);
           if (user.id !== self.props.user.id) {
-            displayInfoPopup(`User [${user.name}] joined!`)
+            displayInfoPopup(`ユーザー[${user.name}]がジョインされました`)
           }
           break;
         case 'session_finished':
@@ -69,7 +69,7 @@ class AdminQuestionSession extends Component {
         <ScreenCutoffBar/>
         <Row className='mt-lg-3 mx-lg-4'>
           <Col className='col-lg-10'>
-            <h4>Element {elementNumber} out of {elementLimit}</h4>
+            <h4>画面{elementNumber}/{elementLimit}</h4>
           </Col>
           <Col className='col-lg-2'>
             <QuestionTimer currentTimeS={this.state.currentTimeS}/>
@@ -95,7 +95,7 @@ class AdminQuestionSession extends Component {
             <Col className='StretchContent'>
               <Row className='StretchContainer align-middle align-items-center text-center '>
                 <Col>
-                  Waiting for users to respond to questions.
+                  ユーザー回答待ち
                 </Col>
               </Row>
               <Row className='StretchContent'/>

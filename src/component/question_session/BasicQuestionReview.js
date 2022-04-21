@@ -22,10 +22,10 @@ class BasicQuestionReview extends Component {
       <Table striped bordered hover>
         <thead>
         <tr>
-          <th className='text-center align-middle'>Name</th>
+          <th className='text-center align-middle'>名前</th>
           <th>
             <Col>
-              <Row>Answer</Row>
+              <Row>回答</Row>
               <Row>
                 <Col className='text-start'>
                   {this.props.question.scaleTextLeft}
@@ -36,7 +36,7 @@ class BasicQuestionReview extends Component {
               </Row>
             </Col>
           </th>
-          <th className='text-center align-middle'>Comment</th>
+          <th className='text-center align-middle'>コメント</th>
         </tr>
         </thead>
         <tbody>

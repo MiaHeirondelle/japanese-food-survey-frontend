@@ -7,7 +7,7 @@ class CantJoinSession extends Component {
     return (
       <Row>
         <Col>
-          <b>You are not allowed to join the current session.</b>
+          <b>セッションに参加できません</b>
         </Col>
       </Row>
     );

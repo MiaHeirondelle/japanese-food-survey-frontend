@@ -8,7 +8,7 @@ class RepeatedQuestion extends Component {
   // Expects pageNumber, elementNumber, question, previousQuestion, respondents, previousAnswers, onSubmit, onChange
 
   render() {
-    const previousAnswer = (this.props.previousAnswers.find((a) => a.respondentId === this.props.user.id) || {value: 'empty'}).value
+    const previousAnswer = (this.props.previousAnswers.find((a) => a.respondentId === this.props.user.id) || {value: '空欄'}).value
     return <Row className='StretchContainer mt-lg-3 mx-lg-4'>
       <Row>
         <Col className='col-lg-6 ImportantText'>
@@ -19,19 +19,9 @@ class RepeatedQuestion extends Component {
           それではどうぞ！
         </Col>
       </Row>
-      <Row className='ImportantText'>
-        <Col className='col-lg-12 ImportantText'>
-          You previously answered the following question:
-        </Col>
-      </Row>
       <Row>
         <Col className='col-lg-12 ImportantText'>
-          {this.props.previousQuestion.text}
-        </Col>
-      </Row>
-      <Row>
-        <Col className='col-lg-12 ImportantText'>
-          Your answer was:
+          あなたの最初の回答:
         </Col>
       </Row>
       <Row>

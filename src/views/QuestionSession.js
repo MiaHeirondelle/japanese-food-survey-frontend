@@ -6,8 +6,6 @@ import {extractFormData} from "../util/FormUtil";
 import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
 import {ElementType} from "../model/session/ElementType";
-import User from "../model/user/User";
-import {displayInfoPopup} from "../util/PopupUtil";
 import * as websocketClient from "../client/websocket";
 import QuestionAnswerModel from "../model/question/QuestionAnswerModel";
 import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
@@ -58,10 +56,6 @@ class QuestionSession extends Component {
           });
           break;
         case 'user_joined':
-          const user = User.fromJson(message.user);
-          if (user.id !== self.props.user.id) {
-            displayInfoPopup(`User [${user.name}] joined!`);
-          }
           break;
         case 'session_finished':
           self.state.socket.close();
@@ -120,7 +114,7 @@ class QuestionSession extends Component {
         <ScreenCutoffBar/>
         <Row className='mt-lg-3 mx-lg-4'>
           <Col className='col-lg-10'>
-            <h4>Element {elementNumber} out of {elementLimit}</h4>
+            <h4>画面{elementNumber}/{elementLimit}</h4>
           </Col>
           <Col className='col-lg-2'>
             <QuestionTimer currentTimeS={this.state.currentTimeS}/>
