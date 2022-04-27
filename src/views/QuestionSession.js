@@ -138,7 +138,8 @@ class QuestionSession extends Component {
               const basicQuestionModel = QuestionModel.fromJson(selectedQuestion);
               return this.renderWithTopbar(
                 <Col className='StretchContent'>
-                  <BasicQuestion question={basicQuestionModel}
+                  <BasicQuestion key={`basic-question-${basicQuestionModel.id}`}
+                                 question={basicQuestionModel}
                                  onSubmit={this.onSubmit.bind(this)}
                                  onChange={this.onChange.bind(this)}/>
                 </Col>
@@ -149,7 +150,8 @@ class QuestionSession extends Component {
               const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
               return this.renderWithTopbar(
                 <Col className='StretchContent'>
-                  <RepeatedQuestion user={this.props.user}
+                  <RepeatedQuestion key={`repeated-question-${repeatedQuestionModel.id}`}
+                                    user={this.props.user}
                                     question={repeatedQuestionModel}
                                     previousQuestion={previousQuestionModel} previousAnswers={answers}
                                     onSubmit={this.onSubmit.bind(this)}
@@ -169,7 +171,8 @@ class QuestionSession extends Component {
               const basicQuestionAnswers = this.state.answers.map(QuestionAnswerModel.fromJson);
               return this.renderWithTopbar(
                 <Col className='StretchContent'>
-                  <BasicQuestionReview user={this.props.user}
+                  <BasicQuestionReview key={`basic-question-review-${basicQuestionModel.id}`}
+                                       user={this.props.user}
                                        respondents={this.state.session.currentRespondents}
                                        question={basicQuestionModel}
                                        answers={basicQuestionAnswers}/>
@@ -181,7 +184,8 @@ class QuestionSession extends Component {
               const previousAnswers = this.state.previousAnswers.map(QuestionAnswerModel.fromJson)
               return this.renderWithTopbar(
                 <Col className='StretchContent'>
-                  <RepeatedQuestionReview user={this.props.user}
+                  <RepeatedQuestionReview key={`repeated-question-review-${repeatedQuestionModel.id}`}
+                                          user={this.props.user}
                                           respondents={this.state.session.currentRespondents}
                                           question={repeatedQuestionModel}
                                           answers={repeatedQuestionAnswers}

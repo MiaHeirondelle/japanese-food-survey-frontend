@@ -11,6 +11,7 @@ import QuestionAnswerModel from "../model/question/QuestionAnswerModel";
 import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
 import QuestionTimer from "../component/question_session/QuestionTimer";
 import * as websocketClient from "../client/websocket";
+import RepeatedQuestionReview from "../component/question_session/RepeatedQuestionReview";
 
 class AdminQuestionSession extends Component {
 
@@ -106,14 +107,29 @@ class AdminQuestionSession extends Component {
           const reviewQuestion = element.question;
           switch (reviewQuestion.type) {
             case QuestionType.BASIC:
-              const questionModel = QuestionModel.fromJson(reviewQuestion);
-              const answers = this.state.answers.map(QuestionAnswerModel.fromJson);
+              const basicQuestionModel = QuestionModel.fromJson(reviewQuestion);
+              const basicQuestionAnswers = this.state.answers.map(QuestionAnswerModel.fromJson);
               return this.renderWithTopbar(
                 <Col className='StretchContent'>
-                  <BasicQuestionReview user={this.props.user}
+                  <BasicQuestionReview key={`basic-question-review-${basicQuestionModel.id}`}
+                                       user={this.props.user}
                                        respondents={this.state.session.currentRespondents}
-                                       question={questionModel}
-                                       answers={answers}/>
+                                       question={basicQuestionModel}
+                                       answers={basicQuestionAnswers}/>
+                </Col>
+              );
+            case QuestionType.REPEATED:
+              const repeatedQuestionModel = QuestionModel.fromJson(reviewQuestion);
+              const repeatedQuestionAnswers = this.state.answers.map(QuestionAnswerModel.fromJson);
+              const previousAnswers = this.state.previousAnswers.map(QuestionAnswerModel.fromJson)
+              return this.renderWithTopbar(
+                <Col className='StretchContent'>
+                  <RepeatedQuestionReview key={`repeated-question-review-${repeatedQuestionModel.id}`}
+                                          user={this.props.user}
+                                          respondents={this.state.session.currentRespondents}
+                                          question={repeatedQuestionModel}
+                                          answers={repeatedQuestionAnswers}
+                                          previousAnswers={previousAnswers}/>
                 </Col>
               );
 
