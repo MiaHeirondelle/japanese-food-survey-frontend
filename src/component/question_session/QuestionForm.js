@@ -80,7 +80,7 @@ class QuestionForm extends Component {
           </Col>
         </Row>
 
-        <Button className='mb-xl-5 w-100' type='submit' disabled={this.props.disabled}>Submit</Button>
+        {/*<Button className='mb-xl-5 w-100' type='submit' disabled={this.props.disabled}>Submit</Button>*/}
       </Form>
     )
   }

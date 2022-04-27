@@ -18,7 +18,8 @@ class BasicQuestion extends Component {
           それではどうぞ！
         </Col>
       </Row>
-      <QuestionForm formId={`form-${this.props.question.id}`}
+      <QuestionForm key={`basic-question-form-${this.props.question.id}`}
+                    formId={`form-${this.props.question.id}`}
                     question={this.props.question}
                     onSubmit={this.props.onSubmit}
                     onChange={this.props.onChange}
