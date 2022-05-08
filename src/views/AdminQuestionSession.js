@@ -40,6 +40,21 @@ class AdminQuestionSession extends Component {
             return {...previousState, element: message.element, answers: message.answers}
           });
           break;
+        case 'repeated_question_review_selected':
+          self.setState((previousState) => {
+            return {
+              ...previousState,
+              element: message.element,
+              answers: message.answers,
+              previousAnswers: message.previous_answers
+            };
+          });
+          break;
+        case 'text_selected':
+          self.setState((previousState) => {
+            return {...previousState, element: message.element}
+          });
+          break;
         case 'user_joined':
           const user = User.fromJson(message.user);
           if (user.id !== self.props.user.id) {
@@ -136,6 +151,18 @@ class AdminQuestionSession extends Component {
             default:
               return 'Unknown question type';
           }
+
+        case ElementType.TEXT:
+          return this.renderWithTopbar(
+            <Col className='StretchContent'>
+              <Row className='StretchContainer align-middle align-items-center text-center '>
+                <Col>
+                  ユーザーテキスト待ち
+                </Col>
+              </Row>
+              <Row className='StretchContent'/>
+            </Col>
+          );
 
         default:
           return 'Unknown element type';
