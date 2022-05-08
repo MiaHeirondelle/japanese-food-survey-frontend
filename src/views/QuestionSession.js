@@ -13,6 +13,7 @@ import RepeatedQuestion from "../component/question_session/RepeatedQuestion";
 import Row from "react-bootstrap/Row";
 import QuestionTimer from "../component/question_session/QuestionTimer";
 import RepeatedQuestionReview from "../component/question_session/RepeatedQuestionReview";
+import TextBanner from "../component/question_session/TextBanner";
 
 class QuestionSession extends Component {
 
@@ -27,6 +28,7 @@ class QuestionSession extends Component {
       element: undefined
     }
     const self = this;
+    // todo: set time from messages
     this.props.socket.onmessage = async function (event) {
       const message = JSON.parse(event.data);
       switch (message.type) {
@@ -52,6 +54,14 @@ class QuestionSession extends Component {
               element: message.element,
               answers: message.answers,
               previousAnswers: message.previous_answers
+            };
+          });
+          break;
+        case 'text_selected':
+          self.setState((previousState) => {
+            return {
+              ...previousState,
+              element: message.element,
             };
           });
           break;
@@ -196,6 +206,12 @@ class QuestionSession extends Component {
             default:
               return 'Unknown question type';
           }
+
+        case ElementType.TEXT:
+          return this.renderWithTopbar(
+            <TextBanner key={`text-banner-${element.number}`}
+                        text={element.text}/>
+          );
 
         default:
           return 'Unknown element type';
