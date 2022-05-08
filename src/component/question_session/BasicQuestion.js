@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-import QuestionForm from "./QuestionForm";
+import BasicQuestionForm from "./BasicQuestionForm";
 
 class BasicQuestion extends Component {
   // Expects question, onSubmit, onChange
@@ -18,11 +18,11 @@ class BasicQuestion extends Component {
           それではどうぞ！
         </Col>
       </Row>
-      <QuestionForm key={`basic-question-form-${this.props.question.id}`}
-                    formId={`form-${this.props.question.id}`}
-                    question={this.props.question}
-                    onSubmit={this.props.onSubmit}
-                    onChange={this.props.onChange}
+      <BasicQuestionForm key={`basic-question-form-${this.props.question.id}`}
+                         formId={`form-${this.props.question.id}`}
+                         question={this.props.question}
+                         onSubmit={this.props.onSubmit}
+                         onChange={this.props.onChange}
       />
     </Row>
   }
