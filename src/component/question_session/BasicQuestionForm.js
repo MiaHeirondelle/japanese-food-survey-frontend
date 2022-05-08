@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-class QuestionForm extends Component {
+class BasicQuestionForm extends Component {
 
   // Expects question, formId, disabled, onSubmit function, onChange function
   constructor(props) {
@@ -86,4 +85,4 @@ class QuestionForm extends Component {
   }
 }
 
-export default QuestionForm;
+export default BasicQuestionForm;
