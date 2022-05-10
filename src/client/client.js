@@ -28,6 +28,10 @@ export async function login(formData) {
   return User.fromJson(userJson);
 }
 
+export async function submitRespondentData(formData) {
+  await sendRequest('PUT', 'user/respondent/data', formData);
+}
+
 export async function authCheck() {
   const response = await sendRequest('GET', 'auth/check');
   if (response.ok) {

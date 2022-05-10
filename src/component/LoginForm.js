@@ -9,12 +9,12 @@ class LoginForm extends Component {
       <Form id={this.props.formId} onSubmit={this.props.onSubmit}>
         <Form.Group className='mb-3' controlId='login'>
           <Form.Label>Login</Form.Label>
-          <Form.Control name='login' type='text' placeholder='Enter login' />
+          <Form.Control name='login' type='text' placeholder='ログイン'/>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='password'>
           <Form.Label>Password</Form.Label>
-          <Form.Control name='password' type='password' placeholder='Password' />
+          <Form.Control name='password' type='password' placeholder='パスワード'/>
         </Form.Group>
         <Button className='btn-block' type='submit' disabled={this.props.disabled}>次へ</Button>
       </Form>
