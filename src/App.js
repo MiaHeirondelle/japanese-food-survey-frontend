@@ -3,7 +3,7 @@ import {AppState} from './component/model.js';
 import React, {Component} from 'react'
 import Login from './views/Login';
 import SessionCheck from "./views/SessionCheck";
-import PersonalInfo from "./views/PersonalInfo";
+import RespondentData from "./views/RespondentData";
 import QuestionSession from "./views/QuestionSession";
 import AdminQuestionSession from "./views/AdminQuestionSession";
 import * as client from "./client/client"
@@ -50,7 +50,11 @@ class App extends Component {
     switch (this.state.name) {
       case AppState.LOGIN:
         return <Login key='explanation'
-                      stateTransitionCb={this.asyncStateTransitionStaticCb(AppState.SESSION_CHECK, this.getSessionState)}/>;
+                      stateTransitionCb={this.loginTransitionCb.bind(this)}/>;
+
+      case AppState.RESPONDENT_DATA:
+        return <RespondentData key='respondentData'
+                               stateTransitionCb={this.asyncStateTransitionStaticCb(AppState.SESSION_CHECK, this.getSessionState)}/>;
 
       case AppState.SESSION_CHECK:
         return <SessionCheck key='sessionCheck'
@@ -58,8 +62,6 @@ class App extends Component {
                              user={this.state.user}
                              stateTransitionCb={this.stateTransitionDynamicCb(this.sessionCheckStateTransition)}/>;
 
-      case AppState.PERSONAL_INFO:
-        return <PersonalInfo key='personalInfo'/>;
 
       case AppState.SESSION_IN_PROGRESS:
         return <QuestionSession key='questionSession'
@@ -70,10 +72,10 @@ class App extends Component {
 
       case AppState.ADMIN_SESSION_IN_PROGRESS:
         return <AdminQuestionSession key='adminQuestionSession'
-                                user={this.state.user}
-                                socket={this.state.socket}
-                                session={this.state.session}
-                                sessionFinishedCb={this.asyncStateTransitionStaticCb(AppState.SESSION_CHECK, this.getSessionState)}/>;
+                                     user={this.state.user}
+                                     socket={this.state.socket}
+                                     session={this.state.session}
+                                     sessionFinishedCb={this.asyncStateTransitionStaticCb(AppState.SESSION_CHECK, this.getSessionState)}/>;
 
       default:
         return <div>Invalid state.</div>;
@@ -90,6 +92,13 @@ class App extends Component {
       return AppState.ADMIN_SESSION_IN_PROGRESS;
     else
       return AppState.SESSION_IN_PROGRESS;
+  }
+
+  async loginTransitionCb(data) {
+    if (data.user.role === UserRole.ADMIN || data.user.userDataSubmitted)
+      await (this.asyncStateTransitionStaticCb(AppState.SESSION_CHECK, this.getSessionState)(data));
+    else
+      this.stateTransitionStaticCb(AppState.RESPONDENT_DATA)(data);
   }
 }
 
