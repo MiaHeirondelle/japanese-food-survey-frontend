@@ -123,17 +123,17 @@ class AdminQuestionSession extends Component {
 
   render() {
     const element = this.state.element;
+    if (this.state.paused) {
+      return this.renderWithTopbar(
+        <Col className='StretchContent'>
+          <Row className='StretchContainer align-middle align-items-center text-center '>
+            <SessionPaused key='session-paused'/>
+          </Row>
+          <Row className='StretchContent'/>
+        </Col>
+      )
+    }
     if (element !== undefined) {
-      if (this.state.paused) {
-        return this.renderWithTopbar(
-          <Col className='StretchContent'>
-            <Row className='StretchContainer align-middle align-items-center text-center '>
-              <SessionPaused key={`session-paused-${element.number}`}/>
-            </Row>
-            <Row className='StretchContent'/>
-          </Col>
-        )
-      }
       switch (element.type) {
         case ElementType.QUESTION:
           return this.renderWithTopbar(
