@@ -14,6 +14,7 @@ import Row from "react-bootstrap/Row";
 import QuestionTimer from "../component/question_session/QuestionTimer";
 import RepeatedQuestionReview from "../component/question_session/RepeatedQuestionReview";
 import TextBanner from "../component/question_session/TextBanner";
+import SessionPaused from "../component/question_session/SessionPaused";
 
 class QuestionSession extends Component {
 
@@ -25,7 +26,8 @@ class QuestionSession extends Component {
       session: this.props.session,
       socket: this.props.socket,
       currentTimeS: 0,
-      element: undefined
+      element: undefined,
+      paused: false
     }
     const self = this;
     // todo: set time from messages
@@ -34,17 +36,17 @@ class QuestionSession extends Component {
       switch (message.type) {
         case 'basic_question_selected':
           self.setState((previousState) => {
-            return {...previousState, element: message.element};
+            return {...previousState, element: message.element, paused: false};
           });
           break;
         case 'repeated_question_selected':
           self.setState((previousState) => {
-            return {...previousState, element: message.element, answers: message.previous_answers};
+            return {...previousState, element: message.element, answers: message.previous_answers, paused: false};
           });
           break;
         case 'basic_question_review_selected':
           self.setState((previousState) => {
-            return {...previousState, element: message.element, answers: message.answers};
+            return {...previousState, element: message.element, answers: message.answers, paused: false};
           });
           break;
         case 'repeated_question_review_selected':
@@ -53,7 +55,8 @@ class QuestionSession extends Component {
               ...previousState,
               element: message.element,
               answers: message.answers,
-              previousAnswers: message.previous_answers
+              previousAnswers: message.previous_answers,
+              paused: false
             };
           });
           break;
@@ -62,6 +65,15 @@ class QuestionSession extends Component {
             return {
               ...previousState,
               element: message.element,
+              paused: false
+            };
+          });
+          break;
+        case 'session_paused':
+          self.setState((previousState) => {
+            return {
+              ...previousState,
+              paused: true
             };
           });
           break;
@@ -83,7 +95,7 @@ class QuestionSession extends Component {
   }
 
   async componentDidMount() {
-    websocketClient.sendReadyToProceed(this.state.socket);
+    websocketClient.readyToProceed(this.state.socket);
   }
 
   async onSubmit(formEvent) {
@@ -139,6 +151,16 @@ class QuestionSession extends Component {
 
   render() {
     const element = this.state.element;
+    if (this.state.paused) {
+      return this.renderWithTopbar(
+        <Col className='StretchContent'>
+          <Row className='StretchContainer align-middle align-items-center text-center '>
+            <SessionPaused key='session-paused'/>
+          </Row>
+          <Row className='StretchContent'/>
+        </Col>
+      )
+    }
     if (element !== undefined) {
       switch (element.type) {
         case ElementType.QUESTION:
