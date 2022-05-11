@@ -8,7 +8,7 @@ class WaitingToStartSession extends Component {
   // expects 'user', 'session', 'socket'
 
   async onBegin() {
-    websocketClient.sendBeginSession(this.props.socket);
+    websocketClient.beginSession(this.props.socket);
   }
 
   render() {

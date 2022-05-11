@@ -4,16 +4,30 @@ const backendUrl = new URL(config['backend']['uri']);
 backendUrl.protocol = backendUrl.protocol === 'https:' ? 'wss' : 'ws';
 const socketUrl = backendUrl.href;
 
-export function sendBeginSession(socket) {
+export function beginSession(socket) {
   const json = {
     'type': 'begin_session'
   }
   sendMessage(socket, JSON.stringify(json));
 }
 
-export function sendReadyToProceed(socket) {
+export function readyToProceed(socket) {
   const json = {
     'type': 'ready_to_proceed'
+  }
+  sendMessage(socket, JSON.stringify(json));
+}
+
+export function pauseSession(socket) {
+  const json = {
+    'type': 'pause_session'
+  }
+  sendMessage(socket, JSON.stringify(json));
+}
+
+export function resumeSession(socket) {
+  const json = {
+    'type': 'resume_session'
   }
   sendMessage(socket, JSON.stringify(json));
 }
