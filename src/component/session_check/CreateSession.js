@@ -35,7 +35,7 @@ class CreateSession extends Component {
         <Col>
           <MultiSelector options={this.respondentOptions} name="respondentSelector"
                          onChangeCb={this.onSelectedUsersChange.bind(this)}/>
-          <Button disabled={this.state.selectedRespondents.length === 0} variant='primary'
+          <Button className='mt-2' disabled={this.state.selectedRespondents.length === 0} variant='primary'
                   onClick={this.onClick.bind(this)}>セッションを作成</Button>
         </Col>
       </Row>

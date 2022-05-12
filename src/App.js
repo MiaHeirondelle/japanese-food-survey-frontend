@@ -60,7 +60,8 @@ class App extends Component {
         return <SessionCheck key='sessionCheck'
                              session={this.state.session}
                              user={this.state.user}
-                             stateTransitionCb={this.stateTransitionDynamicCb(this.sessionCheckStateTransition)}/>;
+                             stateTransitionCb={this.stateTransitionDynamicCb(this.sessionCheckStateTransition)}
+                             logoutCb={this.stateTransitionStaticCb(AppState.LOGIN)}/>;
 
 
       case AppState.SESSION_IN_PROGRESS:

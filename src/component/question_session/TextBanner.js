@@ -12,7 +12,7 @@ class TextBanner extends Component {
   render() {
     return <Col className='StretchContent'>
       <Row className='StretchContainer align-middle align-items-center text-center '>
-        <Col>
+        <Col className='KeepLineBreaks'>
           {this.props.text}
         </Col>
       </Row>

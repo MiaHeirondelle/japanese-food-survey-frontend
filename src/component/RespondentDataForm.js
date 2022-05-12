@@ -36,7 +36,7 @@ class RespondentDataForm extends Component {
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='age'>
-          <Form.Label>Password</Form.Label>
+          <Form.Label>年齢</Form.Label>
           <Form.Control name='age' type='number' defaultValue={18} min={1} max={100}/>
         </Form.Group>
         <Button className='btn-block' type='submit' disabled={this.props.disabled}>次へ</Button>
