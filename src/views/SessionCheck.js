@@ -12,7 +12,9 @@ import * as client from "../client/client";
 import * as websocketClient from "../client/websocket";
 import Session from "../model/session/Session";
 import User from "../model/user/User";
-import {displayInfoPopup} from "../util/PopupUtil";
+import {displayInfoPopup, displayWarningPopup} from "../util/PopupUtil";
+import ScreenCutoffBar from "../component/ScreenCutoffBar";
+import Button from "react-bootstrap/Button";
 
 
 const SessionCheckState = {
@@ -25,7 +27,7 @@ const SessionCheckState = {
 };
 
 class SessionCheck extends Component {
-  // Expects 'user', 'session', 'stateTransitionCb'.
+  // Expects 'user', 'session', 'stateTransitionCb', `logoutCb`.
   constructor(props) {
     super(props);
     this.state = {
@@ -146,17 +148,34 @@ class SessionCheck extends Component {
       console.error('error', event);
     }
     socket.onclose = function (event) {
-      console.log('disconnected', event)
+      console.log('disconnected', event);
+      displayWarningPopup('サーバーから切断されました。問題がある場合は、ページを更新してください')
     }
+  }
+
+  async onLogoutClick() {
+    await client.logout();
+    this.props.logoutCb();
   }
 
   render() {
     return (
-      <Row className='FullHeightContent align-items-center'>
-        <Col className='col-lg-4 offset-lg-4 text-center'>
-          {this.renderContent()}
+      <Col className='FullHeightContent StretchContent'>
+        <ScreenCutoffBar/>
+        <Row className='pt-2'>
+          <Button onClick={this.onLogoutClick.bind(this)}>ログアウト</Button>
+        </Row>
+        <br/>
+        <Col className='StretchContent'>
+          <Row className='StretchContainer align-middle align-items-center text-center '>
+            <Col className='col-lg-4 offset-lg-4 text-center'>
+              {this.renderContent()}
+            </Col>
+          </Row>
+          <Row className='StretchContent'/>
         </Col>
-      </Row>
+        <ScreenCutoffBar/>
+      </Col>
     );
   }
 

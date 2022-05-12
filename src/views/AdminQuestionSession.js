@@ -71,6 +71,7 @@ class AdminQuestionSession extends Component {
           }
           break;
         case 'session_finished':
+          self.state.socket.onClose = undefined;
           self.state.socket.close();
           self.props.sessionFinishedCb();
           break;
@@ -101,7 +102,7 @@ class AdminQuestionSession extends Component {
           </Col>
         </Row>
         <Row>
-          <Button onClick={this.onPauseClick.bind(this)}>{this.state.paused ? 'Unpause' : 'Pause'}</Button>
+          <Button onClick={this.onPauseClick.bind(this)}>{this.state.paused ? '再開' : '途切'}</Button>
         </Row>
         <br/>
         {component}

@@ -28,6 +28,10 @@ export async function login(formData) {
   return User.fromJson(userJson);
 }
 
+export async function logout() {
+  await sendRequest('POST', 'auth/logout');
+}
+
 export async function submitRespondentData(formData) {
   await sendRequest('PUT', 'user/respondent/data', formData);
 }
