@@ -28,7 +28,7 @@ class RespondentData extends Component {
         <Col className='col-lg-4 offset-lg-4'>
           <Row>
             <h5>
-              個人情報を入力してください<br/>
+              以下に回答してください<br/>
               記入したら、「次へ」をクリックしてください<br/>
             </h5>
           </Row>

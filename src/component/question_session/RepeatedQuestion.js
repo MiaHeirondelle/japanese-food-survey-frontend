@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Form from "react-bootstrap/Form";
 
 import RepeatedQuestionForm from "./RepeatedQuestionForm";
 
@@ -26,7 +27,14 @@ class RepeatedQuestion extends Component {
       </Row>
       <Row>
         <Col className='col-lg-12 ImportantText'>
-          {previousAnswer}
+          <Form.Check
+            inline
+            label={previousAnswer}
+            name='previousAnswer'
+            type='radio'
+            value={previousAnswer}
+            id={`previous-question-${this.props.previousQuestion.id}-${this.props.question.id}`}
+          />
         </Col>
       </Row>
       <RepeatedQuestionForm key={`repeated-question-form-${this.props.question.id}`}

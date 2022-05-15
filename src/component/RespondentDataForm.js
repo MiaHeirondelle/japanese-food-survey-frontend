@@ -10,7 +10,9 @@ class RespondentDataForm extends Component {
   render() {
     const sexes = [
       {name: '男性', value: 'male'},
-      {name: '女性', value: 'female'}
+      {name: '女性', value: 'female'},
+      {name: 'その他', value: 'other'},
+      {name: '回答しない', value: 'unspecified'}
     ]
     return (
       <Form id={this.props.formId} onSubmit={this.props.onSubmit}>

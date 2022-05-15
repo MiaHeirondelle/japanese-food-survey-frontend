@@ -12,6 +12,7 @@ class CreateSession extends Component {
     this.respondentOptions = this.props.respondents.map(u => {
       return {id: u.id, name: u.name}
     });
+    this.respondentOptions.sort((a, b) => a.name.localeCompare(b.name));
     this.state = {
       selectedRespondents: []
     }
