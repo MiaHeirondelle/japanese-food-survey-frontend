@@ -29,6 +29,7 @@ class RepeatedQuestion extends Component {
         <Col className='col-lg-12 ImportantText'>
           <Form.Check
             inline
+            onClick={this.ignoreClick}
             label={previousAnswer}
             name='previousAnswer'
             type='radio'
@@ -43,6 +44,10 @@ class RepeatedQuestion extends Component {
                             onSubmit={this.props.onSubmit}
                             onChange={this.props.onChange}/>
     </Row>
+  }
+
+  ignoreClick(event) {
+    event.preventDefault();
   }
 }
 
