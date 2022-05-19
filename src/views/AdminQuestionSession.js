@@ -5,12 +5,14 @@ import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Modal from "react-bootstrap/Modal";
 import {ElementType} from "../model/session/ElementType";
 import User from "../model/user/User";
 import {displayInfoPopup} from "../util/PopupUtil";
 import QuestionAnswerModel from "../model/question/QuestionAnswerModel";
 import BasicQuestionReview from "../component/question_session/BasicQuestionReview";
 import QuestionTimer from "../component/question_session/QuestionTimer";
+import * as client from "../client/client"
 import * as websocketClient from "../client/websocket";
 import RepeatedQuestionReview from "../component/question_session/RepeatedQuestionReview";
 import SessionPaused from "../component/question_session/SessionPaused";
@@ -26,7 +28,8 @@ class AdminQuestionSession extends Component {
       socket: this.props.socket,
       currentTimeS: 0,
       element: undefined,
-      paused: false
+      paused: false,
+      showStopSessionModal: false
     }
     const self = this;
     this.props.socket.onmessage = async function (event) {
@@ -101,8 +104,15 @@ class AdminQuestionSession extends Component {
             <QuestionTimer currentTimeS={this.state.currentTimeS}/>
           </Col>
         </Row>
-        <Row>
-          <Button onClick={this.onPauseClick.bind(this)}>{this.state.paused ? '再開' : '途切'}</Button>
+        <Row className='col-lg-12 mt-2'>
+          <Col className='text-center'>
+            <Button className='col-lg-10 btn-warning'
+                    onClick={this.onPauseClick.bind(this)}>{this.state.paused ? '再開' : '途切'}</Button>
+          </Col>
+          <Col className='text-center'>
+            {this.renderStopSessionModal()}
+            <Button className='col-lg-10 btn-danger' onClick={this.onOpenStopSessionModalClick.bind(this)}>停止</Button>
+          </Col>
         </Row>
         <br/>
         {component}
@@ -120,6 +130,25 @@ class AdminQuestionSession extends Component {
       websocketClient.resumeSession(this.state.socket);
     else
       websocketClient.pauseSession(this.state.socket);
+  }
+
+  async onStopSessionClick() {
+    await client.stopSession();
+    this.state.socket.onClose = undefined;
+    this.state.socket.close();
+    this.props.sessionFinishedCb();
+  }
+
+  onCloseStopSessionModalClick() {
+    this.setState((previousState) => {
+      return {...previousState, showStopSessionModal: false}
+    });
+  }
+
+  onOpenStopSessionModalClick() {
+    this.setState((previousState) => {
+      return {...previousState, showStopSessionModal: true}
+    });
   }
 
   render() {
@@ -200,6 +229,20 @@ class AdminQuestionSession extends Component {
     } else {
       return null;
     }
+  }
+
+  // https://getbootstrap.com/docs/5.0/components/modal/
+  renderStopSessionModal() {
+    return (
+      <Modal show={this.state.showStopSessionModal} onHide={this.onCloseStopSessionModalClick.bind(this)}>
+        <Modal.Header closeButton/>
+        <Modal.Body>セッションを停止しますか？</Modal.Body>
+        <Modal.Footer>
+          <Button className="btn-secondary" onClick={this.onCloseStopSessionModalClick.bind(this)}>閉じる</Button>
+          <Button className="btn-danger" onClick={this.onStopSessionClick.bind(this)}>停止</Button>
+        </Modal.Footer>
+      </Modal>
+    );
   }
 }
 
