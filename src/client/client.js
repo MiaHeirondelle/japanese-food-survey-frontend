@@ -10,6 +10,10 @@ export async function joinSession() {
   return Session.fromJson(sessionJson);
 }
 
+export async function stopSession() {
+  await sendRequest('POST', 'session/stop');
+}
+
 export async function getActiveSession() {
   const response = await sendRequest('GET', 'session/active');
   const sessionJson = await response.json();
