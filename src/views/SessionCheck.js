@@ -158,6 +158,16 @@ class SessionCheck extends Component {
     this.props.logoutCb();
   }
 
+  async onStopSessionCb() {
+    this.state.socket.onClose = undefined;
+    this.state.socket.close();
+    this.setState((previousState) => {
+      return {...previousState, socket: undefined}
+    });
+    await client.stopSession();
+    await this.updateFromSession({status: SessionStatus.NOT_CREATED});
+  }
+
   render() {
     return (
       <Col className='FullHeightContent StretchContent'>
@@ -197,7 +207,10 @@ class SessionCheck extends Component {
         return <NoSession/>
 
       case SessionCheckState.WAITING_TO_START_SESSION:
-        return <WaitingToStartSession user={this.props.user} session={this.state.session} socket={this.state.socket}/>;
+        return <WaitingToStartSession user={this.props.user}
+                                      session={this.state.session}
+                                      socket={this.state.socket}
+                                      onStopSessionCb={this.onStopSessionCb.bind(this)}/>;
     }
   }
 }
