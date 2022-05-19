@@ -89,7 +89,9 @@ class App extends Component {
   }
 
   sessionCheckStateTransition(user, data) {
-    if (user && (user.role === UserRole.ADMIN))
+    if (data && data.stopSession) {
+      return AppState
+    } else if (user && (user.role === UserRole.ADMIN))
       return AppState.ADMIN_SESSION_IN_PROGRESS;
     else
       return AppState.SESSION_IN_PROGRESS;

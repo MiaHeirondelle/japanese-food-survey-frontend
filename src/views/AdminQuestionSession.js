@@ -231,7 +231,7 @@ class AdminQuestionSession extends Component {
     }
   }
 
-  // https://getbootstrap.com/docs/5.0/components/modal/
+  // https://react-bootstrap.github.io/components/modal/
   renderStopSessionModal() {
     return (
       <Modal show={this.state.showStopSessionModal} onHide={this.onCloseStopSessionModalClick.bind(this)}>
