@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {QuestionType} from "../model/session/QuestionType";
 import QuestionModel from "../model/question/QuestionModel";
-import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -95,16 +94,15 @@ class AdminQuestionSession extends Component {
     const elementLimit = this.state.session.template.elements.length;
     return (
       <Col className='FullHeightContent StretchContent'>
-        <ScreenCutoffBar/>
-        <Row className='mt-lg-3 mx-lg-4'>
+        <Row className='align-items-center mt-lg-3 mx-lg-4'>
           <Col className='col-lg-10'>
-            <h4>画面{elementNumber}/{elementLimit}</h4>
+            <h6>画面{elementNumber}/{elementLimit}</h6>
           </Col>
-          <Col className='col-lg-2'>
+          <Col className='text-end col-lg-2'>
             <QuestionTimer currentTimeS={this.state.currentTimeS}/>
           </Col>
         </Row>
-        <Row className='col-lg-12 mt-2'>
+        <Row className='col-lg-12 mt-3'>
           <Col className='text-center'>
             <Button className='col-lg-10 btn-warning'
                     onClick={this.onPauseClick.bind(this)}>{this.state.paused ? '再開' : '途切'}</Button>
@@ -116,7 +114,6 @@ class AdminQuestionSession extends Component {
         </Row>
         <br/>
         {component}
-        <ScreenCutoffBar/>
       </Col>
     );
   }

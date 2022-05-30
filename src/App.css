@@ -41,6 +41,12 @@ html, body, #root {
     margin: 0 0 0 0 !important;
 }
 
+.ScreenBorder {
+    -webkit-box-shadow:inset 0px 0px 0px 10px #D4D4D4;
+    -moz-box-shadow:inset 0px 0px 0px 10px #D4D4D4;
+    box-shadow:inset 0px 0px 0px 10px #D4D4D4;
+}
+
 .ImportantText {
     font-size: 20px
 }

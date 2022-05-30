@@ -9,7 +9,7 @@ class QuestionTimer extends Component {
   }
 
   render() {
-    return <Row className='text-right'><h4>残り時間: {this.props.currentTimeS}</h4></Row>;
+    return <Row className='text-right d-inline'><h4 className='d-inline'>残り時間:</h4> <h2 className='d-inline'>{this.props.currentTimeS}</h2></Row>;
   }
 }
 
