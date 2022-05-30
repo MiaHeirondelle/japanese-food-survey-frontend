@@ -3,7 +3,6 @@ import {QuestionType} from "../model/session/QuestionType";
 import BasicQuestion from "../component/question_session/BasicQuestion";
 import QuestionModel from "../model/question/QuestionModel";
 import {extractFormData} from "../util/FormUtil";
-import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Col from "react-bootstrap/Col";
 import {ElementType} from "../model/session/ElementType";
 import * as websocketClient from "../client/websocket";
@@ -133,18 +132,16 @@ class QuestionSession extends Component {
     const elementLimit = this.state.session.template.elements.length;
     return (
       <Col className='FullHeightContent StretchContent'>
-        <ScreenCutoffBar/>
-        <Row className='mt-lg-3 mx-lg-4'>
+        <Row className='align-items-center mt-lg-3 mx-lg-4'>
           <Col className='col-lg-10'>
-            <h4>画面{elementNumber}/{elementLimit}</h4>
+            <h6>画面{elementNumber}/{elementLimit}</h6>
           </Col>
-          <Col className='col-lg-2'>
+          <Col className='text-end col-lg-2'>
             <QuestionTimer currentTimeS={this.state.currentTimeS}/>
           </Col>
         </Row>
         <br/>
         {component}
-        <ScreenCutoffBar/>
       </Col>
     );
   }

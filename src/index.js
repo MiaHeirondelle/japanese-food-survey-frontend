@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Toaster} from "react-hot-toast";
 
 ReactDOM.render(
-  <div>
+  <div className='ScreenBorder'>
     <App/>
     <Toaster/>
   </div>,

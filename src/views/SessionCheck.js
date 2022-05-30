@@ -13,7 +13,6 @@ import * as websocketClient from "../client/websocket";
 import Session from "../model/session/Session";
 import User from "../model/user/User";
 import {displayInfoPopup, displayWarningPopup} from "../util/PopupUtil";
-import ScreenCutoffBar from "../component/ScreenCutoffBar";
 import Button from "react-bootstrap/Button";
 
 
@@ -171,9 +170,10 @@ class SessionCheck extends Component {
   render() {
     return (
       <Col className='FullHeightContent StretchContent'>
-        <ScreenCutoffBar/>
-        <Row className='pt-2'>
-          <Button onClick={this.onLogoutClick.bind(this)}>ログアウト</Button>
+        <Row className='col-lg-12 mt-3'>
+          <Col className='text-center'>
+            <Button className='col-lg-12' onClick={this.onLogoutClick.bind(this)}>ログアウト</Button>
+          </Col>
         </Row>
         <br/>
         <Col className='StretchContent'>
@@ -184,7 +184,6 @@ class SessionCheck extends Component {
           </Row>
           <Row className='StretchContent'/>
         </Col>
-        <ScreenCutoffBar/>
       </Col>
     );
   }

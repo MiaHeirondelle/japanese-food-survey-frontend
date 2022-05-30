@@ -12,8 +12,8 @@ class TextBanner extends Component {
   render() {
     return <Col className='StretchContent'>
       <Row className='StretchContainer align-middle align-items-center text-center '>
-        <Col className='KeepLineBreaks'>
-          {this.props.text}
+        <Col className='KeepLineBreaks fo'>
+          <h1>{this.props.text}</h1>
         </Col>
       </Row>
       <Row className='StretchContent'/>
