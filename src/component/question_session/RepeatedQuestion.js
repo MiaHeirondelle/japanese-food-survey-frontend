@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Form from "react-bootstrap/Form";
 
 import RepeatedQuestionForm from "./RepeatedQuestionForm";
+import AnswerScale from "./AnswerScale";
 
 class RepeatedQuestion extends Component {
-  // Expects pageNumber, elementNumber, question, previousQuestion, respondents, previousAnswers, onSubmit, onChange
+  // Expects user, pageNumber, elementNumber, question, previousQuestion, respondents, previousAnswers, onSubmit, onChange
 
   render() {
     const previousAnswer = (this.props.previousAnswers.find((a) => a.respondentId === this.props.user.id) || {value: '空欄'}).value
@@ -26,16 +26,8 @@ class RepeatedQuestion extends Component {
         </Col>
       </Row>
       <Row>
-        <Col className='col-lg-12 ImportantText'>
-          <Form.Check
-            inline
-            onClick={this.ignoreClick}
-            label={previousAnswer}
-            name='previousAnswer'
-            type='radio'
-            value={previousAnswer}
-            id={`previous-question-${this.props.previousQuestion.id}-${this.props.question.id}`}
-          />
+        <Col className='col-lg-4 ImportantText'>
+          <AnswerScale answerValue={previousAnswer} respondentId={this.props.user.id}/>
         </Col>
       </Row>
       <RepeatedQuestionForm key={`repeated-question-form-${this.props.question.id}`}
@@ -44,10 +36,6 @@ class RepeatedQuestion extends Component {
                             onSubmit={this.props.onSubmit}
                             onChange={this.props.onChange}/>
     </Row>
-  }
-
-  ignoreClick(event) {
-    event.preventDefault();
   }
 }
 
