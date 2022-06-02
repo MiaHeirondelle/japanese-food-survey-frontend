@@ -42,7 +42,7 @@ class BasicQuestionReview extends Component {
         <tbody>
         {
           this.state.answers.map((answer, index) =>
-            <BasicAnswer key={`answer-${index}`} respondents={this.props.respondents} answer={answer}/>
+            <BasicAnswer key={`answer-${index}`} index={index} respondents={this.props.respondents} answer={answer}/>
           )
         }
         </tbody>
