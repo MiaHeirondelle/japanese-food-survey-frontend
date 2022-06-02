@@ -47,6 +47,11 @@ html, body, #root {
     box-shadow:inset 0px 0px 0px 10px #D4D4D4;
 }
 
+.Avatar {
+    max-width: 150px;
+    max-height: 150px;
+}
+
 .ImportantText {
     font-size: 20px
 }

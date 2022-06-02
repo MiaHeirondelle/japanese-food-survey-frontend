@@ -2,15 +2,17 @@ import React, {Component} from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
+import Image from "react-bootstrap/Image";
 
 class RepeatedAnswer extends Component {
-  // Expects 'respondents', 'answer', 'previousAnswer'
+  // Expects 'index', 'respondents', 'answer', 'previousAnswer'
 
   render() {
     const userName = (this.props.respondents.find(u => u.id === this.props.answer.respondentId) || {name: 'unknown'}).name;
     return <tr>
       <td className='text-center'>
-        <h4>{userName}</h4>
+        <Image className='Avatar' src={`images/avatars/${this.props.index + 1}.png`} fluid={true}/>
+        <h4 className='d-inline ms-4'>{userName}</h4>
       </td>
       <td>
         <Row className='px-3'>

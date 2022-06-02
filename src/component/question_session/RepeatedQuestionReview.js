@@ -60,7 +60,7 @@ class RepeatedQuestionReview extends Component {
         <tbody>
         {
           this.state.answers.map(([answer, previousAnswer], index) =>
-            <RepeatedAnswer key={`answer-${index}`} respondents={this.props.respondents} answer={answer}
+            <RepeatedAnswer key={`answer-${index}`} index={index} respondents={this.props.respondents} answer={answer}
                             previousAnswer={previousAnswer}/>
           )
         }
