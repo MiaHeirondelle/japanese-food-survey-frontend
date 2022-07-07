@@ -35,7 +35,7 @@ class RepeatedQuestionForm extends Component {
           <Col className='col-lg-12'>
             <Row><h4>質問１</h4></Row>
             <Row>
-              <Col className='col-lg-6'>
+              <Col className='col-lg-6 KeepLineBreaks'>
                 <span className='ImportantText'>{this.props.question.text}</span>
               </Col>
               <Col className='col-lg-6'>
