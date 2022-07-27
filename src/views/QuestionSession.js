@@ -29,7 +29,6 @@ class QuestionSession extends Component {
       paused: false
     }
     const self = this;
-    // todo: set time from messages
     this.props.socket.onmessage = async function (event) {
       const message = JSON.parse(event.data);
       switch (message.type) {
