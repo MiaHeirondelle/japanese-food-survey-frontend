@@ -7,7 +7,7 @@ class SessionPaused extends Component {
     return (
       <Row>
         <Col>
-          <b>Session is currently paused. Administrator will resume the session.</b>
+          <b>セッションが現在停止中です。管理者がもうすぐセッションを続きますので、少々お待ちください。</b>
         </Col>
       </Row>
     );
